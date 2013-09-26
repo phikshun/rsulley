@@ -405,6 +405,9 @@ class BitField < Primitive
     raise SyntaxError, "value must be numeric" unless value.is_a? Numeric
     raise SyntaxError, "width must be numeric" unless width.is_a? Numeric
     
+    opts[:endian] = '<' if opts[:endian] && opts[:endian].to_sym == :little
+    opts[:endian] = '>' if opts[:endian] && opts[:endian].to_sym == :big
+    
     @value          = value
     @original_value = value
     @width          = width
@@ -483,10 +486,7 @@ class BitField < Primitive
 end
 
 
-class Byte < BitField
-  attr_accessor :fuzz_complete, :fuzz_library, :fuzzable, :mutant_index, :original_value, :rendered,
-                :value, :type, :name, :width, :max_num, :endian, :format, :signed, :full_range
-                
+class Byte < BitField            
   def initialize(value, opts = {})
     @type = :byte
     value = value.to_s.unpack("C").first unless value.is_a? Numeric
@@ -495,10 +495,7 @@ class Byte < BitField
 end
 
 
-class Word < BitField
-  attr_accessor :fuzz_complete, :fuzz_library, :fuzzable, :mutant_index, :original_value, :rendered,
-                :value, :type, :name, :width, :max_num, :endian, :format, :signed, :full_range
-                
+class Word < BitField            
   def initialize(value, opts = {})
     @type = :word
     value = value.to_s.unpack("S#{opts[:endian]}").first unless value.is_a? Numeric
@@ -507,10 +504,7 @@ class Word < BitField
 end
 
 
-class DWord < BitField
-  attr_accessor :fuzz_complete, :fuzz_library, :fuzzable, :mutant_index, :original_value, :rendered,
-                :value, :type, :name, :width, :max_num, :endian, :format, :signed, :full_range
-                
+class DWord < BitField             
   def initialize(value, opts = {})
     @type = :dword
     value = value.to_s.unpack("L#{opts[:endian]}").first unless value.is_a? Numeric
@@ -519,10 +513,7 @@ class DWord < BitField
 end
 
 
-class QWord < BitField
-  attr_accessor :fuzz_complete, :fuzz_library, :fuzzable, :mutant_index, :original_value, :rendered,
-                :value, :type, :name, :width, :max_num, :endian, :format, :signed, :full_range
-                
+class QWord < BitField          
   def initialize(value, opts = {})
     @type = :qword
     value = value.to_s.unpack("Q#{opts[:endian]}").first unless value.is_a? Numeric

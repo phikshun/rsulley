@@ -1,18 +1,18 @@
 module RSulley
+
+# TODO: need to add options for max read bytes, or read stop string/regex (for readline like operation)
+#       or a lambda with a parser function provided
   
 class BasicTransport
-  extend Forwardable
   attr_accessor :host, :port, :sock, :logger
-  
-  def_delegators(:@sock, :readline, :readline)
-      
-  def initialize(target, opts = {})
-    @host = target.host
-    @port = target.port
+    
+  def initialize(opts = {})
+    @host = opts[:host]
+    @port = opts[:port]
     
     @logger           = opts[:logger]           || Logger.logging(STDOUT)
-    @write_timeout    = opts[:write_timeout]    || 2
-    @read_timeout     = opts[:read_timeout]     || 2
+    @write_timeout    = opts[:write_timeout]    || 1
+    @read_timeout     = opts[:read_timeout]     || 1
     @connect_timeout  = opts[:connect_timeout]  || 2
     
     @sock = nil
@@ -20,7 +20,7 @@ class BasicTransport
   
   def open; end
   def write(data); end
-  def read(max = 10000); end
+  def read(bytes = 1); end
   def close; end
 end
 
@@ -30,22 +30,25 @@ class TcpTransport < BasicTransport
   def open
     Timeout.timeout(@connect_timeout) { @sock = TCPSocket.new @host, @port }; self
   rescue SystemCallError, Timeout::Error => e
-    logger.warn "connect failed - #{e.message}"; nil
+    logger.error "connect failed - #{e.message}"; nil
   end
   
   def write(data)
     return nil if @sock.nil? || @sock.closed?
     Timeout.timeout(@write_timeout) { @sock.write(data) }; self
   rescue SystemCallError, OpenSSL::SSL::SSLError => e
-    logger.warn "write failed - #{e.message}"; nil
+    logger.error "write failed - #{e.message}"; nil
   rescue Timeout::Error
     logger.warn "write timeout"; nil
   end
   
-  def read(max = 10000)
-    return if @sock.nil? || @socket.closed?
+  def read(bytes = 1)
+    return '' if @sock.nil? || @sock.closed?
     @buf = ''
-    Timeout.timeout(@read_timeout) { @buf += @sock.read(max) }; @buf
+    Timeout.timeout(@read_timeout) do 
+      loop { @buf += @sock.read(bytes) }
+    end
+    @buf
   rescue SystemCallError, EOFError => e
     logger.warn "read failed - #{e.message}"; @buf
   rescue Timeout::Error
@@ -63,7 +66,7 @@ end
 class SslTransport < TcpTransport
   attr_accessor :host, :port, :sock, :logger
   
-  def initialize(target, opts = {})
+  def initialize(opts = {})
     super
     
     @ssl_ca       = opts[:ssl_ca]
@@ -92,6 +95,7 @@ class SslTransport < TcpTransport
     end
     
     @sock = OpenSSL::SSL::SSLSocket.new(@sock, ssl_context)
+    @sock.sync_close = true
     
     if @ssl_server_mode
       Timeout.timeout(@connect_timeout) { @sock.accept }
@@ -100,9 +104,9 @@ class SslTransport < TcpTransport
     end
     self
   rescue SystemCallError, OpenSSL::SSL::SSLError => e
-    logger.warn "ssl connect failed - #{e.message}"; nil
+    logger.error "ssl connect failed - #{e.message}"; nil
   rescue Timeout::Error
-    logger.warn "ssl connect timeout"; nil
+    logger.error "ssl connect timeout"; nil
   end
 end
 
@@ -117,7 +121,7 @@ class UdpTransport < BasicTransport
     # use sendto
   end
   
-  def read(max = 1500)
+  def read(bytes = 1500)
   end
   
   def close

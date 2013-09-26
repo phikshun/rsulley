@@ -1,13 +1,15 @@
 # -*- coding: binary -*-
 module RSulley
 
-class Request #< RGraph::Node
+class Request < RSulley::Node
   # This is the top-level container or super-block, instantiated with request or response.
 
   attr_accessor :name, :label, :stack, :block_stack, :closed_blocks, :callbacks,
                 :names, :rendered, :mutant_index, :mutant, :request
 
   def initialize(name, &blk)
+    super(nil)
+    
     @request        = self
     @name           = name
     @label          = name

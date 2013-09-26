@@ -1,10 +1,9 @@
 module RSulley
   
 class BasicMonitor
-  attr_accessor :crash_synopsis, :logger, :target, :elapsed
+  attr_accessor :crash_synopsis, :logger, :elapsed
   
-  def initialize(target, opts = {})
-    @target     = target
+  def initialize(opts = {})
     @logger     = opts[:logger] || Logger.logging(STDOUT)
     @start_time = Time.now
     @elapsed    = 0.0

@@ -6,10 +6,21 @@ require 'active_support/inflector'
 require 'zlib'
 require 'digest'
 require 'logging'
+require 'socket'
+require 'net/telnet'
+
+require 'rgraph/graph'
+require 'rgraph/cluster'
+require 'rgraph/edge'
+require 'rgraph/node'
 
 require 'blocks'
 require 'request'
 require 'primitives'
+require 'transport'
+require 'monitor'
+require 'vmcontrol'
+require 'sessions'
 
 module RSulley
   # This module implements some of the code found in Sulley's main __init__.py.  Block management functions
@@ -17,9 +28,6 @@ module RSulley
 
 BIG_ENDIAN      = ">"
 LITTLE_ENDIAN   = "<"
-
-@sulley_requests      = {}
-@sulley_current       = nil
 
 def get(name = nil)
   return @sulley_current unless name
@@ -31,10 +39,21 @@ def request(name, &block)
   # to the object generated.  Note that this behaviour is different than Sulley.  There are very
   # good reasons for that.
   
+  @sulley_requests ||= {}
+  @sulley_current  ||= nil
+  
   raise SyntaxError, "name #{name} already exists" if @sulley_requests[name]
   @sulley_current = @sulley_requests[name] = Request.new(name, &block)
 end
 alias_method :response, :request
+
+def session(name, opts = {})
+  @sulley_sessions ||= {}
+  
+  return @sulley_sessions[name] if @sulley_sessions[name]
+  
+  @sulley_sessions[name] = RSulley::Session.new(opts)
+end
 
 def mutate
   @sulley_current.mutate

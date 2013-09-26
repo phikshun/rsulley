@@ -1,16 +1,42 @@
 module RSulley
 
 class Target
-  attr_accessor :monitor, :monitor_options, :transport, :transport_options, :vmcontrol, :vmcontrol_options
+  attr_accessor :monitor, :monitor_options, :transport, :transport_options, 
+                :vmcontrol, :vmcontrol_options
                 
-  def initialize(opts = {})
+  def initialize(opts = {})    
     @monitor   = nil
     @transport = nil
     @vmcontrol = nil
     
-    @monitor_options   = {}
-    @transport_options = {}
-    @vmcontrol_options = {}
+    @monitor_options   = { :logger => opts[:logger] }
+    @transport_options = { :logger => opts[:logger] }
+    @vmcontrol_options = { :logger => opts[:logger] }
+    
+    configure(opts)
+  end
+  
+  def configure(opts = {})
+    if opts.key? :monitor
+      if opts[:monitor][:type]
+        @monitor = opts[:monitor][:type]
+        @monitor_options.merge! opts[:monitor]
+      end
+    end
+    
+    if opts.key? :transport
+      if opts[:transport][:type]
+        @transport = opts[:transport][:type]
+        @transport_options.merge! opts[:transport]
+      end
+    end
+    
+    if opts.key? :vmcontrol
+      if opts[:vmcontrol][:type]
+        @vmcontrol = opts[:vmcontrol][:type]
+        @vmcontrol_options.merge! opts[:vmcontrol]
+      end
+    end
   end
   
   def start
@@ -42,7 +68,7 @@ class Target
   end
 end
 
-class Connection #< RGraph::Edge
+class Connection < RSulley::Edge
   attr_accessor :src, :dst, :callback
   
   def initialize(src, dst, opts = {})
@@ -51,17 +77,17 @@ class Connection #< RGraph::Edge
   end
 end
 
-class Session #< RGraph::Graph
+class Session < RSulley::Graph
   attr_accessor :logger
   
   def initialize(opts = {})
-    super
+    super(nil)
     
     @session_filename   = opts[:session_filename]
-    @skip               = opts[:skip]       || 0
-    @sleep_time         = opts[:sleep_time] || 1.0
-    @restart_interval   = opts[:restart_interval]   || 0
-    @timeout            = opts[:timeout]  || 5.0
+    @skip               = opts[:skip]               || 0
+    @sleep_time         = opts[:sleep_time]
+    @restart_interval   = opts[:restart_interval]
+    @timeout            = opts[:timeout]            || 5.0
     @crash_threshold    = opts[:crash_threshold]    || 3
     @restart_sleep_time = opts[:restart_sleep_time] || 300
     
@@ -72,14 +98,14 @@ class Session #< RGraph::Graph
         :error => :red,
         :fatal => [:white, :on_red]
       },
-      :date => :blue,
+      #:date => :blue,
       :logger => :cyan,
-      :message => :magenta
+      #:message => :magenta
     )
     
     Logging.appenders.stdout(
       'stdout',
-      :level  => :debug
+      :level  => :debug,
       :layout => Logging.layouts.pattern(
         :pattern => '[%d] [%-5l] -> %m\n',
         :color_scheme => 'bright'
@@ -93,8 +119,8 @@ class Session #< RGraph::Graph
     if opts[:logfile]
        Logging.appenders.file(
          'file',
-         :filename => opts[:logfile]
-         :level    => opts[:logfile_level] || :debug
+         :filename => opts[:logfile],
+         :level    => opts[:logfile_level] || :debug,
          :layout   => Logging.layouts.pattern(
            :pattern => '[%d] [%-5l] -> %m\n',
          )
@@ -112,12 +138,15 @@ class Session #< RGraph::Graph
     
     import_file
     
-    @root       = RGraph::Node.new
-    @root.name  = "__ROOT_NODE__"
-    @root.label = @root.name
+    @root       = RSulley::Node.new
+    @root.label = "__ROOT_NODE__"
     @last_recv  = nil
     
     add_node(@root)
+  end
+  
+  def target(opts = {})
+    add_target RSulley::Target.new(opts.merge :logger => @logger)
   end
   
   def add_node(node)
@@ -188,7 +217,7 @@ class Session #< RGraph::Graph
     @monitor_results     = data["monitor_results"]
     @pause_flag          = data["pause_flag"]
   rescue => e
-    logger.fail "could not load import file: #{e.message}"
+    logger.error "could not load import file: #{e.message}"
   end
   
   def fuzz(opts = {})
@@ -216,8 +245,8 @@ class Session #< RGraph::Graph
       current_path  = path[1..-1].map { |e| @nodes[e.src].name }.join(' -> ') || ''
       current_path += " -> #{@fuzz_node.name}"
       
-      logger.error "current fuzz path: #{current_path}"
-      logger.error "fuzzed #{@total_mutant_index} of #{@total_num_mutations} total cases"
+      logger.info "current fuzz path: #{current_path}"
+      logger.info "fuzzed #{@total_mutant_index} of #{@total_num_mutations} total cases"
       
       done_with_fuzz_node = false
       crash_count         = 0
@@ -226,7 +255,7 @@ class Session #< RGraph::Graph
         pause
         
         if !@fuzz_node.mutate
-          logger.error "all possible mutations for current fuzz node exhausted"
+          logger.info "all possible mutations for current fuzz node exhausted"
           done_with_fuzz_node = true
           next
         end
@@ -234,25 +263,25 @@ class Session #< RGraph::Graph
         @total_mutant_index += 1
         
         if @restart_interval && @total_mutant_index % @restart_interval == 0
-          logger.error "restart interval of #{@restart_interval} reached"
+          logger.warn "restart interval of #{@restart_interval} reached"
           target.vmcontrol.restart if target.vmcontrol
         end
         
         if @total_mutant_index > @skip
-          logger.error "fuzzing #{@fuzz_node.mutant_index} of #{num_mutations}"
+          logger.info "fuzzing #{@fuzz_node.mutant_index} of #{num_mutations}"
           
           loop do
             target.monitor.start(@total_mutant_index) if target.monitor
             
             if !target.transport.open
-              logger.critical "failed to open transport"
+              logger.error "failed to open transport"
               next
             end
             
             begin
               pre_send(target.transport)
             rescue => e
-              logger.critical "pre_send failed: #{e.message}"
+              logger.error "pre_send failed: #{e.message}"
               target.transport.close
               next
             end
@@ -263,7 +292,7 @@ class Session #< RGraph::Graph
                 transmit(node, e, target)
               end
             rescue => e
-              logger.critical "failed transmitting a node up the path: #{e.message}"
+              logger.error "failed transmitting a node up the path: #{e.message}"
               target.transport.close
               next
             end
@@ -271,7 +300,7 @@ class Session #< RGraph::Graph
             begin
               transmit(@fuzz_node, edge, target)
             rescue => e
-              logger.critical "failed transmitting a node up the path: #{e.message}"
+              logger.error "failed transmitting a node up the path: #{e.message}"
               target.transport.close
               next
             end
@@ -282,7 +311,7 @@ class Session #< RGraph::Graph
           begin
             post_send(target.transport)
           rescue => e
-            logger.critical "post_send failed: #{e.message}"
+            logger.error "post_send failed: #{e.message}"
             target.transport.close
             next
           end
@@ -290,8 +319,10 @@ class Session #< RGraph::Graph
           target.transport.close
           check target
           
-          logger.warning "sleeping for %.02f seconds" % @sleep_time
-          sleep @sleep_time
+          if @sleep_time
+            logger.warn "sleeping for %.02f seconds" % @sleep_time
+            sleep @sleep_time
+          end
           
           export_file
         end
@@ -329,11 +360,11 @@ class Session #< RGraph::Graph
   end
   
   def check(target)
-    next unless target.monitor
+    return unless target.monitor
     target.monitor.finish
     
     if target.monitor.check
-      logger.error "monitor detected issue on test case ##{@total_mutant_index}"
+      logger.info "monitor detected issue on test case ##{@total_mutant_index}"
       
       @crashing_primitives[@fuzz_node.mutant] ||= 0
       @crashing_primitives[@fuzz_node.mutant]  += 1
@@ -345,22 +376,22 @@ class Session #< RGraph::Graph
       end
       
       msg += "type: #{@fuzz_node.mutant.type}, default value: #{@fuzz_node.mutant.original_value}"
-      logger.error msg
+      logger.info msg
       
       @monitor_results[@total_mutant_index] = target.monitor.crash_synopsis
-      logger.error @monitor_results[@total_mutant_index]
+      logger.info @monitor_results[@total_mutant_index]
       
       if @crashing_primitives[@fuzz_node.mutant] >= @crash_threshold
         unless @fuzz_node.mutant.is_a?(Repeat) || @fuzz_node.mutant.is_a?(Group)
           skipped = @fuzz_node.mutant.exhaust
-          logger.warning "crash threshold reached for this primitive, exhausting #{skipped} mutants"
+          logger.warn "crash threshold reached for this primitive, exhausting #{skipped} mutants"
           @total_mutant_index     += skipped
           @fuzz_node.mutant_index += skipped
         end
       end
       
       if target.vmcontrol && !target.vmcontrol.restart
-        logger.critical "restarting the target failed, exiting"
+        logger.fatal "restarting the target failed, exiting"
         export_file
         exit
       end
@@ -380,13 +411,13 @@ class Session #< RGraph::Graph
       data = edge.callback.call(node, edge, target.transport)
     end
     
-    logger.error "xmitting: [#{node.id}.#{@total_mutant_index}]"
+    logger.info "xmitting: [#{node.id}.#{@total_mutant_index}]"
     data = node.render unless data
     
     begin
-      transport.write(data)
+      target.transport.write(data)
       logger.debug "sent #{data.to_s.length} bytes:\n#{data.to_s.hexdump}"
-      @last_recv = transport.read
+      @last_recv = target.transport.read
     rescue => e
       logger.error "transport error: #{e.message}"
       logger.debug "backtrace:\n#{e.backtrace}"
@@ -396,7 +427,7 @@ class Session #< RGraph::Graph
     if @last_recv.length > 0
       logger.debug "recevied #{@last_recv.length} bytes:\n#{@last_recv.hexdump}"
     else
-      logger.warning "no response received"
+      logger.warn "no response received"
     end
   end
 end
