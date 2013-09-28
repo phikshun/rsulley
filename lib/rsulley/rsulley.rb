@@ -47,12 +47,12 @@ def request(name, &block)
 end
 alias_method :response, :request
 
-def session(name, opts = {})
+def session(name, opts = {}, &blk)
   @sulley_sessions ||= {}
   
-  return @sulley_sessions[name] if @sulley_sessions[name]
-  
-  @sulley_sessions[name] = RSulley::Session.new(opts)
+  @sulley_sessions[name] = RSulley::Session.new(opts) unless @sulley_sessions[name]
+  @sulley_sessions[name].run_with_block(@sulley_requests, &blk) if block_given?
+  @sulley_sessions[name]
 end
 
 def mutate
@@ -77,8 +77,9 @@ def reset
 end
 
 def reset!
+  @sulley_sessions = {}
   @sulley_requests = {}
-  @sulley_current = nil
+  @sulley_current  = nil
 end
 
 end

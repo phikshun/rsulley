@@ -105,7 +105,7 @@ class Session < RSulley::Graph
     
     Logging.appenders.stdout(
       'stdout',
-      :level  => :debug,
+      :level  => opts[:log_level] || :debug,
       :layout => Logging.layouts.pattern(
         :pattern => '[%d] [%-5l] -> %m\n',
         :color_scheme => 'bright'
@@ -113,7 +113,7 @@ class Session < RSulley::Graph
     )
     
     @logger = Logging.logger['rsulley_logger']
-    @logger.level = :debug
+    @logger.level = opts[:log_level] || :debug
     @logger.add_appenders 'stdout'
     
     if opts[:logfile]
@@ -135,6 +135,7 @@ class Session < RSulley::Graph
     @monitor_results     = {}
     @pause_flag          = false
     @crashing_primitives = {}
+    @injected_requests   = {}
     
     import_file
     
@@ -168,8 +169,13 @@ class Session < RSulley::Graph
       src = @root
     end
     
-    src = find_node :name, src if src.is_a?(String) || src.is_a?(Symbol)
-    dst = find_node :name, dst if dst.is_a?(String) || dst.is_a?(Symbol)
+    if src.is_a?(String) || src.is_a?(Symbol)
+      src = find_node(:name, src) || @injected_requests[src]
+    end
+    
+    if dst.is_a?(String) || dst.is_a?(Symbol)
+      dst = find_node(:name, dst) ||  @injected_requests[dst]
+    end
     
     add_node(src) unless src == @root || find_node(:name, src.name)
     add_node(dst) unless find_node(:name, dst.name)
@@ -177,6 +183,11 @@ class Session < RSulley::Graph
     edge = Connection.new(src.id, dst.id, opts)
     add_edge edge
     edge
+  end
+  
+  def run_with_block(requests, &blk)
+    @injected_requests = requests
+    instance_eval(&blk)
   end
   
   def export_file
@@ -201,6 +212,8 @@ class Session < RSulley::Graph
   end
   
   def import_file
+    return unless @session_filename
+    
     f = File.open(@session_filename, 'rb')
     data = YAML.load(Zlib.inflate(f.read))
     f.close
@@ -256,6 +269,7 @@ class Session < RSulley::Graph
         
         if !@fuzz_node.mutate
           logger.info "all possible mutations for current fuzz node exhausted"
+          @fuzz_node.reset
           done_with_fuzz_node = true
           next
         end
@@ -364,7 +378,7 @@ class Session < RSulley::Graph
     target.monitor.finish
     
     if target.monitor.check
-      logger.info "monitor detected issue on test case ##{@total_mutant_index}"
+      logger.fatal "monitor detected issue on test case ##{@total_mutant_index}"
       
       @crashing_primitives[@fuzz_node.mutant] ||= 0
       @crashing_primitives[@fuzz_node.mutant]  += 1
@@ -376,15 +390,15 @@ class Session < RSulley::Graph
       end
       
       msg += "type: #{@fuzz_node.mutant.type}, default value: #{@fuzz_node.mutant.original_value}"
-      logger.info msg
+      logger.fatal msg
       
       @monitor_results[@total_mutant_index] = target.monitor.crash_synopsis
-      logger.info @monitor_results[@total_mutant_index]
+      logger.fatal "crash dump:\n#{@monitor_results[@total_mutant_index]}"
       
       if @crashing_primitives[@fuzz_node.mutant] >= @crash_threshold
         unless @fuzz_node.mutant.is_a?(Repeat) || @fuzz_node.mutant.is_a?(Group)
           skipped = @fuzz_node.mutant.exhaust
-          logger.warn "crash threshold reached for this primitive, exhausting #{skipped} mutants"
+          logger.error "crash threshold reached for this primitive, exhausting #{skipped} mutants"
           @total_mutant_index     += skipped
           @fuzz_node.mutant_index += skipped
         end
@@ -416,7 +430,9 @@ class Session < RSulley::Graph
     
     begin
       target.transport.write(data)
-      logger.debug "sent #{data.to_s.length} bytes:\n#{data.to_s.hexdump}"
+      logger.debug "sent #{data.to_s.length} bytes:\n" + 
+        "#{data.to_s.length > 1023 ? data.to_s[0..1023].hexdump + "\n...snip..." : data.to_s.hexdump}"
+        
       @last_recv = target.transport.read
     rescue => e
       logger.error "transport error: #{e.message}"

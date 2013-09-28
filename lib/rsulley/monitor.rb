@@ -1,7 +1,7 @@
 module RSulley
   
 class BasicMonitor
-  attr_accessor :crash_synopsis, :logger, :elapsed
+  attr_accessor :crash_synopsis, :logger, :elapsed, :current_mutant_index
   
   def initialize(opts = {})
     @logger     = opts[:logger] || Logger.logging(STDOUT)
@@ -9,8 +9,9 @@ class BasicMonitor
     @elapsed    = 0.0
   end
   
-  def start
-    @start_time = Time.now
+  def start(mutant_index)
+    @current_mutant_index = mutant_index
+    @start_time           = Time.now
   end
   
   def finish
@@ -26,9 +27,7 @@ class BasicMonitor
 end
 
 class FortigateMonitor < BasicMonitor
-  attr_accessor :crash_synopsis, :logger, :target, :elapsed
-  
-  def initialize(target, opts = {})
+  def initialize(opts = {})
     super
     
     @telnet_host    = opts[:telnet_host]
@@ -38,13 +37,14 @@ class FortigateMonitor < BasicMonitor
     @telnet_pass    = opts[:telnet_pass]    || ''
     
     telnet_login
+    telnet_cmd('diag debug crash clear')
   end
   
   def telnet_login
     @telnet = Net::Telnet.new "Host" => @telnet_host, "Port" => @telnet_port, "Prompt" => @telnet_prompt
     @telnet.login @telnet_user, @telnet_pass
   rescue Errno::ETIMEDOUT, Timeout::Error => e
-    logger.warn "telnet could not connect to target #{@telnet_host}:#{@telnet_port} - #{e.message}"
+    logger.error "telnet could not connect to target #{@telnet_host}:#{@telnet_port} - #{e.message}"
     logger.debug "backtrace:\n#{e.backtrace}"
     sleep(1)
     retry

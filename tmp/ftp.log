@@ -1,0 +1,279 @@
+[2013-09-27 08:31:28] [ERROR] -> could not load import file: No such file or directory - tmp/ftp.state
+[2013-09-27 08:46:26] [FATAL] -> monitor detected issue on test case #5667
+[2013-09-27 08:46:26] [FATAL] -> primitive has no name, type: delim, default value:  
+[2013-09-27 08:46:26] [FATAL] -> crash dump:
+1: 2013-09-27 08:46:26 <00048> firmware FortiGate-VM v5.00.4,build0228b228,130809 (Release)
+2: 2013-09-27 08:46:26 <00048> application proxyworker
+3: 2013-09-27 08:46:26 <00048> *** signal 11 (Segmentation fault) received ***
+4: 2013-09-27 08:46:26 <00048> Register dump:
+5: 2013-09-27 08:46:26 <00048> EAX: 0a0cc2e0   EBX: 00000000   ECX: 4132a208    EDX: 00000000
+6: 2013-09-27 08:46:26 <00048> ESI: 00000004   EDI: 00000009   EBP: bffffc58    ESP: bffffc58
+7: 2013-09-27 08:46:26 <00048> EIP: 0820c2e0   EFLAGS: 00010246
+8: 2013-09-27 08:46:26 <00048> CS: 0073   DS: 007b   ES: 007b   FS: 0000   GS: 0033   SS: 007b
+9: 2013-09-27 08:46:26 <00048> Trap: 0000000e   Error: 00000004   OldMask: 00000000
+10: 2013-09-27 08:46:26 <00048> ESP/signal: bffffc58   CR2: 00000000
+11: 2013-09-27 08:46:26 <00048> Backtrace:
+12: 2013-09-27 08:46:26 <00048> [0x0820c2e0] => /bin/proxyworker  
+13: 2013-09-27 08:46:26 <00048> [0x0820d89b] => /bin/proxyworker  
+14: 2013-09-27 08:46:26 <00048> [0x08213d94] => /bin/proxyworker  
+15: 2013-09-27 08:46:26 <00048> [0x0820e16d] => /bin/proxyworker  
+16: 2013-09-27 08:46:26 <00048> [0x0820f1d3] => /bin/proxyworker  
+17: 2013-09-27 08:46:26 <00048> [0x08876918] => /bin/proxyworker  
+18: 2013-09-27 08:46:26 <00048> [0x080770ca] => /bin/proxyworker  
+19: 2013-09-27 08:46:26 <00048> [0x08075695] => /bin/proxyworker  
+20: 2013-09-27 08:46:26 <00048> [0x400bf3e5] => ../lib/libc.so.6 (__libc_start_main+0x000000f5) 
+21: 2013-09-27 08:46:26 liboffset 000193e5
+22: 2013-09-27 08:46:26 <00048> [0x080758c1] => /bin/proxyworker  
+23: 2013-09-27 08:46:26 <00042> proxyapp=proxyworker000 pid=48 exittype=signal code=11
+24: 2013-09-27 08:46:26 <00042> total=2019 free=728 shmfs_total=1660 shmfs_free=1640
+
+FortiGate-VM # 
+[2013-09-27 08:46:26] [FATAL] -> monitor detected issue on test case #5668
+[2013-09-27 08:46:26] [FATAL] -> primitive has no name, type: string, default value: fuzz
+[2013-09-27 08:46:26] [FATAL] -> crash dump:
+1: 2013-09-27 08:46:26 <06070> firmware FortiGate-VM v5.00.4,build0228b228,130809 (Release)
+2: 2013-09-27 08:46:26 <06070> application proxyworker
+3: 2013-09-27 08:46:26 <06070> *** signal 11 (Segmentation fault) received ***
+4: 2013-09-27 08:46:26 <06070> Register dump:
+5: 2013-09-27 08:46:26 <06070> EAX: 0a0540f0   EBX: 00000000   ECX: 40db200f    EDX: 00000000
+6: 2013-09-27 08:46:26 <06070> ESI: 00000004   EDI: 00000009   EBP: bffffc58    ESP: bffffc58
+7: 2013-09-27 08:46:26 <06070> EIP: 0820c2e0   EFLAGS: 00010246
+8: 2013-09-27 08:46:26 <06070> CS: 0073   DS: 007b   ES: 007b   FS: 0000   GS: 0033   SS: 007b
+9: 2013-09-27 08:46:26 <06070> Trap: 0000000e   Error: 00000004   OldMask: 00000000
+10: 2013-09-27 08:46:26 <06070> ESP/signal: bffffc58   CR2: 00000000
+11: 2013-09-27 08:46:26 <06070> Backtrace:
+12: 2013-09-27 08:46:26 <06070> [0x0820c2e0] => /bin/proxyworker  
+13: 2013-09-27 08:46:26 <06070> [0x0820d89b] => /bin/proxyworker  
+14: 2013-09-27 08:46:26 <06070> [0x08213d94] => /bin/proxyworker  
+15: 2013-09-27 08:46:26 <06070> [0x0820e16d] => /bin/proxyworker  
+16: 2013-09-27 08:46:26 <06070> [0x0820f1d3] => /bin/proxyworker  
+17: 2013-09-27 08:46:26 <06070> [0x08876918] => /bin/proxyworker  
+18: 2013-09-27 08:46:26 <06070> [0x080770ca] => /bin/proxyworker  
+19: 2013-09-27 08:46:26 <06070> [0x08075695] => /bin/proxyworker  
+20: 2013-09-27 08:46:26 <06070> [0x400bf3e5] => ../lib/libc.so.6 (__libc_start_main+0x000000f5) 
+21: 2013-09-27 08:46:26 liboffset 000193e5
+22: 2013-09-27 08:46:26 <06070> [0x080758c1] => /bin/proxyworker  
+23: 2013-09-27 08:46:26 <00042> proxyapp=proxyworker000 pid=6070 exittype=signal code=11
+24: 2013-09-27 08:46:26 <00042> total=2019 free=739 shmfs_total=1660 shmfs_free=1652
+
+FortiGate-VM # 
+[2013-09-27 08:46:31] [FATAL] -> monitor detected issue on test case #5710
+[2013-09-27 08:46:31] [FATAL] -> primitive has no name, type: string, default value: fuzz
+[2013-09-27 08:46:31] [FATAL] -> crash dump:
+1: 2013-09-27 08:46:31 <06071> firmware FortiGate-VM v5.00.4,build0228b228,130809 (Release)
+2: 2013-09-27 08:46:31 <06071> application proxyworker
+3: 2013-09-27 08:46:31 <06071> *** signal 11 (Segmentation fault) received ***
+4: 2013-09-27 08:46:31 <06071> Register dump:
+5: 2013-09-27 08:46:31 <06071> EAX: 0a05f4c0   EBX: 00000000   ECX: 40dbc0d7    EDX: 00000000
+6: 2013-09-27 08:46:31 <06071> ESI: 00000004   EDI: 00000009   EBP: bffffc58    ESP: bffffc58
+7: 2013-09-27 08:46:31 <06071> EIP: 0820c2e0   EFLAGS: 00010246
+8: 2013-09-27 08:46:31 <06071> CS: 0073   DS: 007b   ES: 007b   FS: 0000   GS: 0033   SS: 007b
+9: 2013-09-27 08:46:31 <06071> Trap: 0000000e   Error: 00000004   OldMask: 00000000
+10: 2013-09-27 08:46:31 <06071> ESP/signal: bffffc58   CR2: 00000000
+11: 2013-09-27 08:46:31 <06071> Backtrace:
+12: 2013-09-27 08:46:31 <06071> [0x0820c2e0] => /bin/proxyworker  
+13: 2013-09-27 08:46:31 <06071> [0x0820d89b] => /bin/proxyworker  
+14: 2013-09-27 08:46:31 <06071> [0x08213d94] => /bin/proxyworker  
+15: 2013-09-27 08:46:31 <06071> [0x0820e16d] => /bin/proxyworker  
+16: 2013-09-27 08:46:31 <06071> [0x0820f1d3] => /bin/proxyworker  
+17: 2013-09-27 08:46:31 <06071> [0x08876918] => /bin/proxyworker  
+18: 2013-09-27 08:46:31 <06071> [0x080770ca] => /bin/proxyworker  
+19: 2013-09-27 08:46:31 <06071> [0x08075695] => /bin/proxyworker  
+20: 2013-09-27 08:46:31 <06071> [0x400bf3e5] => ../lib/libc.so.6 (__libc_start
+[2013-09-27 09:33:16] [ERROR] -> write failed - Broken pipe
+[2013-09-27 09:34:10] [ERROR] -> write failed - Broken pipe
+[2013-09-27 09:34:36] [ERROR] -> write failed - Broken pipe
+[2013-09-27 10:35:10] [FATAL] -> monitor detected issue on test case #29277
+[2013-09-27 10:35:10] [FATAL] -> primitive has no name, type: delim, default value:  
+[2013-09-27 10:35:10] [FATAL] -> crash dump:
+1: 2013-09-27 10:35:10 <06078> firmware FortiGate-VM v5.00.4,build0228b228,130809 (Release)
+2: 2013-09-27 10:35:10 <06078> application proxyworker
+3: 2013-09-27 10:35:10 <06078> *** signal 11 (Segmentation fault) received ***
+4: 2013-09-27 10:35:10 <06078> Register dump:
+5: 2013-09-27 10:35:10 <06078> EAX: 0911a878   EBX: 40244ff4   ECX: 40d80000    EDX: 00000000
+6: 2013-09-27 10:35:10 <06078> ESI: 00000000   EDI: 0000000a   EBP: 00000003    ESP: bffffc30
+7: 2013-09-27 10:35:10 <06078> EIP: 401d185b   EFLAGS: 00010283
+8: 2013-09-27 10:35:10 <06078> CS: 0073   DS: 007b   ES: 007b   FS: 0000   GS: 0033   SS: 007b
+9: 2013-09-27 10:35:10 <06078> Trap: 0000000e   Error: 00000004   OldMask: 00000000
+10: 2013-09-27 10:35:10 <06078> ESP/signal: bffffc30   CR2: 00000000
+11: 2013-09-27 10:35:10 <06078> Backtrace:
+12: 2013-09-27 10:35:10 <06078> [0x401d185b] => ../lib/libc.so.6  liboffset 0012b85b
+13: 2013-09-27 10:35:10 <06078> [0x0820c354] => /bin/proxyworker  
+14: 2013-09-27 10:35:10 <06078> [0x0820d89b] => /bin/proxyworker  
+15: 2013-09-27 10:35:10 <06078> [0x08213d94] => /bin/proxyworker  
+16: 2013-09-27 10:35:10 <06078> [0x0820e16d] => /bin/proxyworker  
+17: 2013-09-27 10:35:10 <06078> [0x0820f1d3] => /bin/proxyworker  
+18: 2013-09-27 10:35:10 <06078> [0x08876918] => /bin/proxyworker  
+19: 2013-09-27 10:35:10 <06078> [0x080770ca] => /bin/proxyworker  
+20: 2013-09-27 10:35:10 <06078> [0x08075695] => /bin/proxywo
+[2013-09-27 10:35:13] [FATAL] -> monitor detected issue on test case #29286
+[2013-09-27 10:35:13] [FATAL] -> primitive has no name, type: delim, default value:  
+[2013-09-27 10:35:13] [FATAL] -> crash dump:
+diag debug crash read
+1: 2013-09-27 10:35:12 <06102> firmware FortiGate-VM v5.00.4,build0228b228,130809 (Release)
+2: 2013-09-27 10:35:12 <06102> application proxyworker
+3: 2013-09-27 10:35:12 <06102> *** signal 11 (Segmentation fault) received ***
+4: 2013-09-27 10:35:12 <06102> Register dump:
+5: 2013-09-27 10:35:12 <06102> EAX: 0911a878   EBX: 40244ff4   ECX: 40d80000    EDX: 00000000
+6: 2013-09-27 10:35:12 <06102> ESI: 00000000   EDI: 0000000a   EBP: 00000003    ESP: bffffc30
+7: 2013-09-27 10:35:12 <06102> EIP: 401d185b   EFLAGS: 00010283
+8: 2013-09-27 10:35:12 <06102> CS: 0073   DS: 007b   ES: 007b   FS: 0000   GS: 0033   SS: 007b
+9: 2013-09-27 10:35:12 <06102> Trap: 0000000e   Error: 00000004   OldMask: 00000000
+10: 2013-09-27 10:35:12 <06102> ESP/signal: bffffc30   CR2: 00000000
+11: 2013-09-27 10:35:12 <06102> Backtrace:
+12: 2013-09-27 10:35:12 <06102> [0x401d185b] => ../lib/libc.so.6  liboffset 0012b85b
+13: 2013-09-27 10:35:12 <06102> [0x0820c354] => /bin/proxyworker  
+14: 2013-09-27 10:35:12 <06102> [0x0820d89b] => /bin/proxyworker  
+15: 2013-09-27 10:35:12 <06102> [0x08213d94] => /bin/proxyworker  
+16: 2013-09-27 10:35:12 <06102> [0x0820e16d] => /bin/proxyworker  
+17: 2013-09-27 10:35:12 <06102> [0x0820f1d3] => /bin/proxyworker  
+18: 2013-09-27 10:35:12 <06102> [0x08876918] => /bin/proxyworker  
+19: 2013-09-27 10:35:12 <06102> [0x080770ca] => /bin/proxyworker  
+20: 2013-09-27 10:35:12 <06102> [0x08075695] => /bin/proxyworker  
+21: 2013-09-27 10:35:12 <06102> [0x400bf3e5] => ../lib/libc.so.6 (__libc_start_main+0x000000f5) 
+22: 2013-09-27 10:35:12 liboffset 000193e5
+23: 2013-09-27 10:35:12 <06102> [0x080758c1] => /bin/proxyworker  
+24: 2013-09-27 10:35:12 <00042> proxyapp=proxyworker000 pid=6102 exittype=signal code=11
+25: 2013-09-27 10:35:12 <00042> total=2019 free=699 shmfs_total=1660 shmfs_free=1652
+
+FortiGate-VM # 
+[2013-09-27 10:35:13] [FATAL] -> monitor detected issue on test case #29287
+[2013-09-27 10:35:13] [FATAL] -> primitive has no name, type: delim, default value:  
+[2013-09-27 10:35:13] [FATAL] -> crash dump:
+1: 2013-09-27 10:35:13 <06104> firmware FortiGate-VM v5.00.4,build0228b228,130809 (Release)
+2: 2013-09-27 10:35:13 <06104> application proxyworker
+3: 2013-09-27 10:35:13 <06104> *** signal 11 (Segmentation fault) received ***
+4: 2013-09-27 10:35:13 <06104> Register dump:
+5: 2013-09-27 10:35:13 <06104> EAX: 0911a878   EBX: 40244ff4   ECX: 40d80000    EDX: 00000000
+6: 2013-09-27 10:35:13 <06104> ESI: 00000000   EDI: 0000000a   EBP: 00000003    ESP: bffffc30
+7: 2013-09-27 10:35:13 <06104> EIP: 401d185b   EFLAGS: 00010283
+8: 2013-09-27 10:35:13 <06104> CS: 0073   DS: 007b   ES: 007b   FS: 0000   GS: 0033   SS: 007b
+9: 2013-09-27 10:35:13 <06104> Trap: 0000000e   Error: 00000004   OldMask: 00000000
+10: 2013-09-27 10:35:13 <06104> ESP/signal: bffffc30   CR2: 00000000
+11: 2013-09-27 10:35:13 <06104> Backtrace:
+12: 2013-09-27 10:35:13 <06104> [0x401d185b] => ../lib/libc.so.6  liboffset 0012b85b
+13: 2013-09-27 10:35:13 <06104> [0x0820c354] => /bin/proxyworker  
+14: 2013-09-27 10:35:13 <06104> [0x0820d89b] => /bin/proxyworker  
+15: 2013-09-27 10:35:13 <06104> [0x08213d94] => /bin/proxyworker  
+16: 2013-09-27 10:35:13 <06104> [0x0820e16d] => /bin/proxyworker  
+17: 2013-09-27 10:35:13 <06104> [0x0820f1d3] => /bin/proxyworker  
+18: 2013-09-27 10:35:13 <06104> [0x08876918] => /bin/proxyworker  
+19: 2013-09-27 10:35:13 <06104> [0x080770ca] => /bin/proxyworker  
+20: 2013-09-27 10:35:13 <06104> [0x08075695] => /bin/proxyworker  
+21: 2013-09-27 10:35:13 <06104> [0x400bf3e5] => ../lib/libc.so.6 (__libc_start_main+0x000000f5) 
+22: 2013-09-27 10:35:13 liboffset 000193e5
+23: 2013-09-27 10:35:13 <06104> [0x080758c1] => /bin/proxyworker  
+24: 2013-09-27 10:35:13 <00042> proxyapp=proxyworker000 pid=6104 exittype=signal code=11
+25: 2013-09-27 10:35:13 <00042> total=2019 free=699 shmfs_total=1660 shmfs_free=1652
+
+FortiGate-VM # 
+[2013-09-27 10:35:13] [ERROR] -> crash threshold reached for this primitive, exhausting 29 mutants
+[2013-09-27 10:35:13] [FATAL] -> monitor detected issue on test case #29317
+[2013-09-27 10:35:13] [FATAL] -> primitive has no name, type: string, default value: fuzz
+[2013-09-27 10:35:13] [FATAL] -> crash dump:
+1: 2013-09-27 10:35:13 <06105> firmware FortiGate-VM v5.00.4,build0228b228,130809 (Release)
+2: 2013-09-27 10:35:13 <06105> application proxyworker
+3: 2013-09-27 10:35:13 <06105> *** signal 11 (Segmentation fault) received ***
+4: 2013-09-27 10:35:13 <06105> Register dump:
+5: 2013-09-27 10:35:13 <06105> EAX: 0911a878   EBX: 40244ff4   ECX: 40d80000    EDX: 00000000
+6: 2013-09-27 10:35:13 <06105> ESI: 00000000   EDI: 0000000a   EBP: 00000003    ESP: bffffc30
+7: 2013-09-27 10:35:13 <06105> EIP: 401d185b   EFLAGS: 00010283
+8: 2013-09-27 10:35:13 <06105> CS: 0073   DS: 007b   ES: 007b   FS: 0000   GS: 0033   SS: 007b
+9: 2013-09-27 10:35:13 <06105> Trap: 0000000e   Error: 00000004   OldMask: 00000000
+10: 2013-09-27 10:35:13 <06105> ESP/signal: bffffc30   CR2: 00000000
+11: 2013-09-27 10:35:13 <06105> Backtrace:
+12: 2013-09-27 10:35:13 <06105> [0x401d185b] => ../lib/libc.so.6  liboffset 0012b85b
+13: 2013-09-27 10:35:13 <06105> [0x0820c354] => /bin/proxyworker  
+14: 2013-09-27 10:35:13 <06105> [0x0820d89b] => /bin/proxyworker  
+15: 2013-09-27 10:35:13 <06105> [0x08213d94] => /bin/proxyworker  
+16: 2013-09-27 10:35:13 <06105> [0x0820e16d] => /bin/proxyworker  
+17: 2013-09-27 10:35:13 <06105> [0x0820f1d3] => /bin/proxyworker  
+18: 2013-09-27 10:35:13 <06105> [0x08876918] => /bin/proxyworker  
+19: 2013-09-27 10:35:13 <06105> [0x080770ca] => /bin/proxyworker  
+20: 2013-09-27 10:35:13 <06105> [0x08075695] => /bin/proxywo
+[2013-09-27 10:35:27] [FATAL] -> monitor detected issue on test case #29359
+[2013-09-27 10:35:27] [FATAL] -> primitive has no name, type: string, default value: fuzz
+[2013-09-27 10:35:27] [FATAL] -> crash dump:
+1: 2013-09-27 10:35:26 <06106> firmware FortiGate-VM v5.00.4,build0228b228,130809 (Release)
+2: 2013-09-27 10:35:26 <06106> application proxyworker
+3: 2013-09-27 10:35:26 <06106> *** signal 11 (Segmentation fault) received ***
+4: 2013-09-27 10:35:26 <06106> Register dump:
+5: 2013-09-27 10:35:26 <06106> EAX: 0911a878   EBX: 40244ff4   ECX: 40d80000    EDX: 00000000
+6: 2013-09-27 10:35:26 <06106> ESI: 00000000   EDI: 0000000a   EBP: 00000003    ESP: bffffc30
+7: 2013-09-27 10:35:26 <06106> EIP: 401d185b   EFLAGS: 00010283
+8: 2013-09-27 10:35:26 <06106> CS: 0073   DS: 007b   ES: 007b   FS: 0000   GS: 0033   SS: 007b
+9: 2013-09-27 10:35:26 <06106> Trap: 0000000e   Error: 00000004   OldMask: 00000000
+10: 2013-09-27 10:35:26 <06106> ESP/signal: bffffc30   CR2: 00000000
+11: 2013-09-27 10:35:26 <06106> Backtrace:
+12: 2013-09-27 10:35:26 <06106> [0x401d185b] => ../lib/libc.so.6  liboffset 0012b85b
+13: 2013-09-27 10:35:26 <06106> [0x0820c354] => /bin/proxyworker  
+14: 2013-09-27 10:35:26 <06106> [0x0820d89b] => /bin/proxyworker  
+15: 2013-09-27 10:35:26 <06106> [0x08213d94] => /bin/proxyworker  
+16: 2013-09-27 10:35:26 <06106> [0x0820e16d] => /bin/proxyworker  
+17: 2013-09-27 10:35:26 <06106> [0x0820f1d3] => /bin/proxyworker  
+18: 2013-09-27 10:35:26 <06106> [0x08876918] => /bin/proxyworker  
+19: 2013-09-27 10:35:26 <06106> [0x080770ca] => /bin/proxyworker  
+20: 2013-09-27 10:35:26 <06106> [0x08075695] => /bin/proxywo
+[2013-09-27 11:41:09] [FATAL] -> monitor detected issue on test case #41641
+[2013-09-27 11:41:09] [FATAL] -> primitive has no name, type: delim, default value:  
+[2013-09-27 11:41:09] [FATAL] -> crash dump:
+1: 2013-09-27 11:41:09 <06107> firmware FortiGate-VM v5.00.4,build0228b228,130809 (Release)
+2: 2013-09-27 11:41:09 <06107> application proxyworker
+3: 2013-09-27 11:41:09 <06107> *** signal 11 (Segmentation fault) received ***
+4: 2013-09-27 11:41:09 <06107> Register dump:
+5: 2013-09-27 11:41:09 <06107> EAX: 0a053ca0   EBX: 00000000   ECX: 40d8b012    EDX: 00000000
+6: 2013-09-27 11:41:09 <06107> ESI: 00000008   EDI: 00000009   EBP: bffffc58    ESP: bffffc58
+7: 2013-09-27 11:41:09 <06107> EIP: 0820c2e0   EFLAGS: 00010246
+8: 2013-09-27 11:41:09 <06107> CS: 0073   DS: 007b   ES: 007b   FS: 0000   GS: 0033   SS: 007b
+9: 2013-09-27 11:41:09 <06107> Trap: 0000000e   Error: 00000004   OldMask: 00000000
+10: 2013-09-27 11:41:09 <06107> ESP/signal: bffffc58   CR2: 00000000
+11: 2013-09-27 11:41:09 <06107> Backtrace:
+12: 2013-09-27 11:41:09 <06107> [0x0820c2e0] => /bin/proxyworker  
+13: 2013-09-27 11:41:09 <06107> [0x0820d89b] => /bin/proxyworker  
+14: 2013-09-27 11:41:09 <06107> [0x08213d94] => /bin/proxyworker  
+15: 2013-09-27 11:41:09 <06107> [0x0820e16d] => /bin/proxyworker  
+16: 2013-09-27 11:41:09 <06107> [0x0820f1d3] => /bin/proxyworker  
+17: 2013-09-27 11:41:09 <06107> [0x08876918] => /bin/proxyworker  
+18: 2013-09-27 11:41:09 <06107> [0x080770ca] => /bin/proxyworker  
+19: 2013-09-27 11:41:09 <06107> [0x08075695] => /bin/proxyworker  
+20: 2013-09-27 11:41:09 <06107> [0x400bf3e5] => ../lib/libc.so.6 (__libc_start_main+0x000000f5) 
+21: 2013-09-27 11:41:09 liboffset 000193e5
+22: 2013-09-27 11:41:09 <06107> [0x080758c1] => /bin/proxyworker  
+23: 2013-09-27 11:41:09 <00042> proxyapp=proxyworker000 pid=6107 exittype=signal code=11
+24: 2013-09-27 11:41:09 <00042> total=2019 free=659 shmfs_total=1660 shmfs_free=1652
+
+FortiGate-VM # 
+[2013-09-27 11:41:09] [ERROR] -> crash threshold reached for this primitive, exhausting 39 mutants
+[2013-09-27 11:41:09] [FATAL] -> monitor detected issue on test case #41681
+[2013-09-27 11:41:09] [FATAL] -> primitive has no name, type: string, default value: fuzz
+[2013-09-27 11:41:09] [FATAL] -> crash dump:
+1: 2013-09-27 11:41:09 <06116> firmware FortiGate-VM v5.00.4,build0228b228,130809 (Release)
+2: 2013-09-27 11:41:09 <06116> application proxyworker
+3: 2013-09-27 11:41:09 <06116> *** signal 11 (Segmentation fault) received ***
+4: 2013-09-27 11:41:09 <06116> Register dump:
+5: 2013-09-27 11:41:09 <06116> EAX: 0a0537f8   EBX: 00000000   ECX: 40d5a00f    EDX: 00000000
+6: 2013-09-27 11:41:09 <06116> ESI: 00000004   EDI: 00000009   EBP: bffffc58    ESP: bffffc58
+7: 2013-09-27 11:41:09 <06116> EIP: 0820c2e0   EFLAGS: 00010246
+8: 2013-09-27 11:41:09 <06116> CS: 0073   DS: 007b   ES: 007b   FS: 0000   GS: 0033   SS: 007b
+9: 2013-09-27 11:41:09 <06116> Trap: 0000000e   Error: 00000004   OldMask: 00000000
+10: 2013-09-27 11:41:09 <06116> ESP/signal: bffffc58   CR2: 00000000
+11: 2013-09-27 11:41:09 <06116> Backtrace:
+12: 2013-09-27 11:41:09 <06116> [0x0820c2e0] => /bin/proxyworker  
+13: 2013-09-27 11:41:09 <06116> [0x0820d89b] => /bin/proxyworker  
+14: 2013-09-27 11:41:09 <06116> [0x08213d94] => /bin/proxyworker  
+15: 2013-09-27 11:41:09 <06116> [0x0820e16d] => /bin/proxyworker  
+16: 2013-09-27 11:41:09 <06116> [0x0820f1d3] => /bin/proxyworker  
+17: 2013-09-27 11:41:09 <06116> [0x08876918] => /bin/proxyworker  
+18: 2013-09-27 11:41:09 <06116> [0x080770ca] => /bin/proxyworker  
+19: 2013-09-27 11:41:09 <06116> [0x08075695] => /bin/proxyworker  
+20: 2013-09-27 11:41:09 <06116> [0x400bf3e5] => ../lib/libc.so.6 (__libc_start
+[2013-09-27 11:41:09] [ERROR] -> crash threshold reached for this primitive, exhausting 1076 mutants
+[2013-09-27 11:48:03] [ERROR] -> write failed - Broken pipe
+[2013-09-27 11:49:47] [ERROR] -> write failed - Broken pipe
+[2013-09-27 11:51:35] [ERROR] -> write failed - Connection reset by peer
+[2013-09-27 13:32:46] [ERROR] -> write failed - Broken pipe
+[2013-09-27 13:34:03] [ERROR] -> write failed - Broken pipe
+[2013-09-27 13:34:58] [ERROR] -> write failed - Broken pipe
+[2013-09-27 13:35:26] [ERROR] -> write failed - Broken pipe
+[2013-09-27 13:37:14] [ERROR] -> write failed - Broken pipe
+[2013-09-27 13:38:49] [ERROR] -> write failed - Broken pipe

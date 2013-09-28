@@ -4,11 +4,14 @@ module RSulley
 #       or a lambda with a parser function provided
   
 class BasicTransport
-  attr_accessor :host, :port, :sock, :logger
+  attr_accessor :host, :port, :sock, :logger, :reader, :writer
     
   def initialize(opts = {})
     @host = opts[:host]
     @port = opts[:port]
+    
+    @reader = opts[:reader]
+    @writer = opts[:writer]
     
     @logger           = opts[:logger]           || Logger.logging(STDOUT)
     @write_timeout    = opts[:write_timeout]    || 1
@@ -18,15 +21,13 @@ class BasicTransport
     @sock = nil
   end
   
-  def open; end
-  def write(data); end
-  def read(bytes = 1); end
-  def close; end
+  def open; self; end
+  def write(data); self; end
+  def read(bytes = 1); ''; end
+  def close; self; end
 end
 
 class TcpTransport < BasicTransport
-  attr_accessor :host, :port, :sock, :logger
-  
   def open
     Timeout.timeout(@connect_timeout) { @sock = TCPSocket.new @host, @port }; self
   rescue SystemCallError, Timeout::Error => e
@@ -35,7 +36,14 @@ class TcpTransport < BasicTransport
   
   def write(data)
     return nil if @sock.nil? || @sock.closed?
-    Timeout.timeout(@write_timeout) { @sock.write(data) }; self
+    Timeout.timeout(@write_timeout) do
+      if @writer
+        @writer.call(@sock)
+      else
+        @sock.write(data)
+      end
+    end
+    self
   rescue SystemCallError, OpenSSL::SSL::SSLError => e
     logger.error "write failed - #{e.message}"; nil
   rescue Timeout::Error
@@ -45,8 +53,12 @@ class TcpTransport < BasicTransport
   def read(bytes = 1)
     return '' if @sock.nil? || @sock.closed?
     @buf = ''
-    Timeout.timeout(@read_timeout) do 
-      loop { @buf += @sock.read(bytes) }
+    Timeout.timeout(@read_timeout) do
+      if @reader
+        @buf = @reader.call(@sock)
+      else
+        loop { @buf += @sock.read(bytes).to_s }
+      end
     end
     @buf
   rescue SystemCallError, EOFError => e
@@ -64,8 +76,6 @@ class TcpTransport < BasicTransport
 end
 
 class SslTransport < TcpTransport
-  attr_accessor :host, :port, :sock, :logger
-  
   def initialize(opts = {})
     super
     
@@ -111,8 +121,6 @@ class SslTransport < TcpTransport
 end
 
 class UdpTransport < BasicTransport
-  attr_accessor :host, :port, :sock, :logger
-  
   def open
     # open udp socket
   end
