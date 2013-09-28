@@ -345,13 +345,15 @@ session :smtp do
   connect :ehlo, :smtp_complete1
 end
 
-session :smtp do
-  File.open 'smtp.udg', 'w' do |f|
-    f.write render_graph_udraw
-  end
-end
-
-exit
+# dump udraw diagram of session graph
+#
+#session :smtp do
+#  File.open 'smtp.udg', 'w' do |f|
+#    f.write render_graph_udraw
+#  end
+#end
+#
+#exit
 
 session :smtp do
   target(
