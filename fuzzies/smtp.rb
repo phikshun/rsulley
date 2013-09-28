@@ -25,6 +25,13 @@ request :help do
   static "\r\n"
 end
 
+request :starttls do
+  static "STARTTLS"
+  static "\r\n"
+  string "fuzz"
+  static "\r\n"
+end
+
 request :noop do
   static "NOOP"
   delim  ' '
@@ -186,7 +193,8 @@ request :mail_from_with_cmd1 do
   delim  '>'
   delim  ' '
   
-  group  :mail_from_cmd1, 'BODY', 'TRANSID', 'AUTH', 'BY', 'RET', 'ENVID', 'MT-PRIORITY', 'MTRK'
+  group  :mail_from_cmd1, 'BODY', 'TRANSID', 'AUTH', 'BY', 'RET', 'ENVID', 'MT-PRIORITY', 
+                          'MTRK', 'SMTPUTF8', 'SUBMITTER'
   
   block  :mail_from_cmd1_blk, :group => :mail_from_cmd1 do
     delim  '='
@@ -255,7 +263,7 @@ request :quit do
 end
 
 request :smtp_complete1 do
-  string "MAIL FROM"
+  static "MAIL FROM"
   delim  ':'
   delim  '<'
   string 'test'
@@ -266,7 +274,7 @@ request :smtp_complete1 do
   delim  '>'
   static "\r\n"
   
-  string "RCPT TO"
+  static "RCPT TO"
   delim  ':'
   delim  '<'
   string 'test'
@@ -277,14 +285,35 @@ request :smtp_complete1 do
   delim  '>'
   static "\r\n"
   
-  string "DATA"
+  static "DATA"
   static "\r\n"
   
   string 'Subject'
   delim  ':'
   delim  ' '
-  string 'A' * 50
+  string 'fuzz'
   static "\r\n"
+  
+  group  :headers, 'cc', 'bcc', 'DL-Expansion-History', 'Path', 'Received', 'Return-Path', 'Content-Disposition',
+                   'Alternate-Recipient', 'Message-Context', 'Disclose-Recipients', 'MIME-Version',
+                   'Original-Encoded-Information-Types', 'Apparently-To', 'Distribution', 'From', 'Originator-Info',
+                   'Sender', 'To', 'X-Envelope-From', 'X-Envelope-To', 'X-RCPT-TO', 'X-Sender', 'X-X-Sender',
+                   'Content-Return', 'Disposition-Notification-Options', 'Disposition-Notification-To',
+                   'Followup-To', 'Generate-Delivery-Report', 'Original-Recipient', 'Prevent-NonDelivery-Report',
+                   'Reply-To', 'Mail-Followup-To', 'Mail-Reply-To', 'Date', 'Delivery-Date', 'Expires',
+                   'Expiry-Date', 'Reply-By', 'Importance', 'Priority', 'X-MSMail-Priority', 'X-Priority',
+                   'Content-Length', 'Lines', 'Content-Alternative', 'Conversion', 'Content-Transfer-Encoding',
+                   'Content-Type', 'Encoding', 'Message-Type', 'Status', 'X-No-Archive', 'Delivered-To',
+                   'X-Received By', 'Message-id', 'Dkim-Signature', 'Authentication-Results', 'Received-Spf',
+                   'X-Sg-Eid', 'X-Originating-Ip', 'Accept-Language', 'Content-Language'
+
+  block  :header_values, :group => :headers do
+    delim  ':'
+    delim  ' '
+    string 'fuzz'
+    static "\r\n"
+  end
+  
   string 'B' * 1000
   static "\r\n"
   delim  '.'
@@ -294,11 +323,13 @@ request :smtp_complete1 do
   static "\r\n"
 end
 
-session :smtp, :logfile => 'tmp/smtp.log', :logfile_level => :error, :session_filename => 'tmp/smtp1.state'
+session :smtp, :logfile => 'tmp/smtp.log', :logfile_level => :error, :session_filename => 'tmp/smtp.state'
 
 session :smtp do
   connect :helo
   connect :ehlo
+  connect :helo, :starttls
+  connect :ehlo, :starttls
   connect :helo, :help
   connect :ehlo, :help
   connect :helo, :turn
@@ -341,7 +372,6 @@ session :smtp do
   connect :burl,                :quit
   connect :message,             :quit
   
-  connect :helo, :smtp_complete1
   connect :ehlo, :smtp_complete1
 end
 
