@@ -48,31 +48,29 @@ requests = [
   :http_verbs_post_req,
 ]
 
-request.each do |req|
-  reset!
-  
-  session :http, :logfile => 'tmp/http.log', :logfile_level => :error, :session_filename => 'tmp/http.state'
+session :http, :logfile => 'tmp/http.log', :logfile_level => :error#, :session_filename => 'tmp/http.state'
 
+requests.each do |req|
   session :http do
     connect req
   end
+end
 
-  session :http do
-    target(
-      :transport => {
-          :type         => :tcp,
-          :host         => '10.0.0.2',
-          :port         => 80,
-          :reader       => ->(s) { http_reader(s) }
-        },
-      :monitor => {
-          :type         => :fortigate,
-          :telnet_host  => '172.16.8.101' 
-        }
-    )
-  end
+session :http do
+  target(
+    :transport => {
+        :type         => :tcp,
+        :host         => '10.0.0.2',
+        :port         => 80,
+        :reader       => ->(s) { http_reader(s) }
+      },
+    :monitor => {
+        :type         => :fortigate,
+        :telnet_host  => '172.16.8.101' 
+      }
+  )
+end
 
-  session :http do
-    fuzz
-  end
+session :http do
+  fuzz
 end

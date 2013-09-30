@@ -31,9 +31,6 @@ def http_reader(socket)
     else
       buf += socket.read
     end
-  rescue => e
-    puts "error parsing response - #{e.message}"
-    puts e.backtrace
   end
   
   buf
