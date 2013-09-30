@@ -43,7 +43,7 @@ class FortigateMonitor < BasicMonitor
   def telnet_login
     @telnet = Net::Telnet.new "Host" => @telnet_host, "Port" => @telnet_port, "Prompt" => @telnet_prompt
     @telnet.login @telnet_user, @telnet_pass
-  rescue Errno::ETIMEDOUT, Timeout::Error => e
+  rescue Errno::ETIMEDOUT, Errno::EPIPE, Timeout::Error => e
     logger.error "telnet could not connect to target #{@telnet_host}:#{@telnet_port} - #{e.message}"
     logger.debug "backtrace:\n#{e.backtrace}"
     sleep(1)
@@ -56,7 +56,7 @@ class FortigateMonitor < BasicMonitor
     else
       @telnet.cmd(cmd)
     end
-  rescue Errno::ETIMEDOUT, Timeout::Error => e
+  rescue Errno::ETIMEDOUT, Errno::EPIPE, Timeout::Error => e
     logger.warn "telnet logged out... retrying"
     login
   end

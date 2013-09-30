@@ -1,4 +1,5 @@
-# short rsulley script to test basic smtp handling
+# rsulley script to test smtp handling
+# needs to be optimized
 
 request :helo do
   static "HELO"
