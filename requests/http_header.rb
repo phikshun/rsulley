@@ -344,7 +344,13 @@ request :http_header_host do
   static "Host"
   delim  ":"
   delim  " "
-  string "127.0.0.1"
+  dword  127, :format => :ascii
+  delim  '.'
+  dword  0, :format => :ascii
+  delim  '.'
+  dword  0, :format => :ascii
+  delim  '.'
+  dword  1, :format => :ascii
   static "\r\n"
   string "Connection"
   delim  ":"

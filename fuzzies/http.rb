@@ -3,9 +3,7 @@ require 'requests/http_post'
 require 'requests/http_header'
 
 requests = [
-  :http_verbs,
-  :http_method,
-  :http_req,
+  :http_header_host,
   :http_header_accept,
   :http_header_acceptcharset,
   :http_header_acceptdatetime,
@@ -21,7 +19,6 @@ requests = [
   :http_header_dnt,
   :http_header_expect,
   :http_header_from,
-  :http_header_host,
   :http_header_ifmatch,
   :http_header_ifmodifiedsince,
   :http_header_ifnonematch,
@@ -43,12 +40,15 @@ requests = [
   :http_header_xforwardedfor,
   :http_header_xrequestedwith,
   :http_header_xwapprofile,
+  :http_verbs,
+  :http_method,
+  :http_req,
   :http_verbs_post_all,
   :http_verbs_post,
   :http_verbs_post_req,
 ]
 
-session :http, :logfile => 'tmp/http.log', :logfile_level => :error#, :session_filename => 'tmp/http.state'
+session :http, :logfile => 'tmp/http.log', :logfile_level => :error, :session_filename => 'tmp/http.state'
 
 requests.each do |req|
   session :http do
