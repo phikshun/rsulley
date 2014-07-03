@@ -5,6 +5,7 @@
 
 request :http_header_accept do
   static "GET / HTTP/1.1\r\n"
+  static "Host: 172.16.8.101\r\n"
   static "Accept"
   delim  ":"
   delim  " "
@@ -73,6 +74,7 @@ end
 
 request :http_header_acceptcharset do
   static "GET / HTTP/1.1\r\n"
+  static "Host: 172.16.8.101\r\n"
   static "Accept-Charset"
   delim  ":"
   delim  " "
@@ -102,6 +104,7 @@ end
 
 request :http_header_acceptdatetime do
   static "GET / HTTP/1.1\r\n"
+  static "Host: 172.16.8.101\r\n"
   static "Accept-Datetime"
   delim  ":"
   delim  " "
@@ -131,6 +134,7 @@ end
 
 request :http_header_acceptencoding do
   static "GET / HTTP/1.1\r\n"
+  static "Host: 172.16.8.101\r\n"
   static "Accept-Encoding"
   delim  ":"
   delim  " "
@@ -147,6 +151,7 @@ end
 
 request :http_header_acceptlanguage do
   static "GET / HTTP/1.1\r\n"
+  static "Host: 172.16.8.101\r\n"
   static "Accept-Language"
   delim  ":"
   delim  " "
@@ -167,6 +172,7 @@ end
 
 request :http_header_authorization do
   static "GET / HTTP/1.1\r\n"
+  static "Host: 172.16.8.101\r\n"
   static "Authorization"
   delim  ":"
   delim  " "
@@ -183,6 +189,7 @@ end
 
 request :http_header_cachecontrol do
   static "GET / HTTP/1.1\r\n"
+  static "Host: 172.16.8.101\r\n"
   static "Cache-Control"
   delim  ":"
   delim  " "
@@ -199,6 +206,7 @@ end
 
 request :http_header_close do
   static "GET / HTTP/1.1\r\n"
+  static "Host: 172.16.8.101\r\n"
   static "Connection"
   delim  ":"
   delim  " "
@@ -213,6 +221,7 @@ end
 
 request :http_header_contentlength do
   static "GET / HTTP/1.1\r\n"
+  static "Host: 172.16.8.101\r\n"
   static "Content-Length"
   delim  ":"
   delim  " "
@@ -227,6 +236,7 @@ end
 
 request :http_header_contentmd5 do
   static "GET / HTTP/1.1\r\n"
+  static "Host: 172.16.8.101\r\n"
   static "Content-MD5"
   delim  ":"
   delim  " "
@@ -241,6 +251,7 @@ end
 
 request :http_header_cookie do
   static "GET / HTTP/1.1\r\n"
+  static "Host: 172.16.8.101\r\n"
 
   block :cookie do
     static "Cookie"
@@ -264,6 +275,7 @@ end
 
 request :http_header_date do
   static "GET / HTTP/1.1\r\n"
+  static "Host: 172.16.8.101\r\n"
   static "Date"
   delim  ":"
   delim  " "
@@ -293,6 +305,7 @@ end
 
 request :http_header_dnt do
   static "GET / HTTP/1.1\r\n"
+  static "Host: 172.16.8.101\r\n"
   static "DNT"
   delim  ":"
   delim  " "
@@ -307,6 +320,7 @@ end
 
 request :http_header_expect do
   static "GET / HTTP/1.1\r\n"
+  static "Host: 172.16.8.101\r\n"
   static "Expect"
   delim  ":"
   delim  " "
@@ -323,6 +337,7 @@ end
 
 request :http_header_from do
   static "GET / HTTP/1.1\r\n"
+  static "Host: 172.16.8.101\r\n"
   static "From"
   delim  ":"
   delim  " "
@@ -366,6 +381,7 @@ end
 
 request :http_header_ifmatch do
   static "GET / HTTP/1.1\r\n"
+  static "Host: 172.16.8.101\r\n"
   static "If-Match"
   delim  ":"
   delim  " "
@@ -382,6 +398,7 @@ end
 
 request :http_header_ifmodifiedsince do
   static "GET / HTTP/1.1\r\n"
+  static "Host: 172.16.8.101\r\n"
   static "If-Modified-Since"
   delim  ":"
   delim  " "
@@ -411,6 +428,7 @@ end
 
 request :http_header_ifnonematch do
   static "GET / HTTP/1.1\r\n"
+  static "Host: 172.16.8.101\r\n"
   static "If-None-Match"
   delim  ":"
   delim  " "
@@ -427,6 +445,7 @@ end
 
 request :http_header_ifrange do
   static "GET / HTTP/1.1\r\n"
+  static "Host: 172.16.8.101\r\n"
   static "If-Range"
   delim  ":"
   delim  " "
@@ -443,6 +462,7 @@ end
 
 request :http_header_ifunmodifiedsince do
   static "GET / HTTP/1.1\r\n"
+  static "Host: 172.16.8.101\r\n"
   static "If-Unmodified-Since"
   delim  ":"
   delim  " "
@@ -472,6 +492,7 @@ end
 
 request :http_header_keepalive do
   static "GET / HTTP/1.1\r\n"
+  static "Host: 172.16.8.101\r\n"
   static "Keep-Alive"
   delim  ":"
   delim  " "
@@ -486,6 +507,7 @@ end
 
 request :http_header_maxforwards do
   static "GET / HTTP/1.1\r\n"
+  static "Host: 172.16.8.101\r\n"
   static "Max-Forwards"
   delim  ":"
   delim  " "
@@ -500,6 +522,7 @@ end
 
 request :http_header_pragma do
   static "GET / HTTP/1.1\r\n"
+  static "Host: 172.16.8.101\r\n"
   static "Pragma"
   delim  ":"
   delim  " "
@@ -514,6 +537,7 @@ end
 
 request :http_header_proxyauthorization do
   static "GET / HTTP/1.1\r\n"
+  static "Host: 172.16.8.101\r\n"
   static "Proxy-Authorization"
   delim  ":"
   delim  " "
@@ -530,6 +554,7 @@ end
 
 request :http_header_range do
   static "GET / HTTP/1.1\r\n"
+  static "Host: 172.16.8.101\r\n"
   static "Range"
   delim  ":"
   delim  " "
@@ -543,15 +568,16 @@ end
 
 ########################################################################################################################
 # Fuzz Referer header
-# Referer: http://www.google.com
+# Referer: http://172.16.8.101
 ########################################################################################################################
 
 request :http_header_referer do
   static "GET / HTTP/1.1\r\n"
+  static "Host: 172.16.8.101\r\n"
   static "Referer"
   delim  ":"
   delim  " "
-  string "http://www.google.com"
+  string "http://172.16.8.101"
   static "\r\n\r\n"
 end
 
@@ -562,6 +588,7 @@ end
 
 request :http_header_te do
   static "GET / HTTP/1.1\r\n"
+  static "Host: 172.16.8.101\r\n"
   static "TE"
   delim  ":"
   delim  " "
@@ -579,6 +606,7 @@ end
 
 request :http_header_upgrade do
   static "GET / HTTP/1.1\r\n"
+  static "Host: 172.16.8.101\r\n"
   static "Upgrade"
   delim  ":"
   delim  " "
@@ -616,6 +644,7 @@ end
 
 request :http_header_useragent do
   static "GET / HTTP/1.1\r\n"
+  static "Host: 172.16.8.101\r\n"
   static "User-Agent"
   delim  ":"
   delim  " "
@@ -630,6 +659,7 @@ end
 
 request :http_header_via do
   static "GET / HTTP/1.1\r\n"
+  static "Host: 172.16.8.101\r\n"
   static "Via"
   delim  ":"
   delim  " "
@@ -663,6 +693,7 @@ end
 
 request :http_header_warning do
   static "GET / HTTP/1.1\r\n"
+  static "Host: 172.16.8.101\r\n"
   static "Warning"
   delim  ":"
   delim  " "
@@ -679,6 +710,7 @@ end
 
 request :http_header_xattdeviceid do
   static "GET / HTTP/1.1\r\n"
+  static "Host: 172.16.8.101\r\n"
   static "x-att-deviceid"
   delim  ":"
   delim  " "
@@ -695,6 +727,7 @@ end
 
 request :http_header_xdonottrack do
   static "GET / HTTP/1.1\r\n"
+  static "Host: 172.16.8.101\r\n"
   static "X-Do-Not-Track"
   delim  ":"
   delim  " "
@@ -710,6 +743,7 @@ end
 
 request :http_header_xforwardedfor do
   static "GET / HTTP/1.1\r\n"
+  static "Host: 172.16.8.101\r\n"
   static "X-Forwarded-For"
   delim  ":"
   delim  " "
@@ -727,6 +761,7 @@ end
 
 request :http_header_xrequestedwith do
   static "GET / HTTP/1.1\r\n"
+  static "Host: 172.16.8.101\r\n"
   static "X-Requested-With"
   delim  ":"
   delim  " "
@@ -741,6 +776,7 @@ end
 
 request :http_header_xwapprofile do
   static "GET / HTTP/1.1\r\n"
+  static "Host: 172.16.8.101\r\n"
   static "x-wap-profile"
   delim  ":"
   delim  " "

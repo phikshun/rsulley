@@ -205,6 +205,35 @@ class Random < Primitive
   end
 end
 
+
+class Calc < Primitive
+  attr_accessor :fuzz_complete, :fuzz_library, :fuzzable, :mutant_index, :original_value, :rendered,
+                :value, :type, :name
+                
+  def initialize(value, opts = {})
+    @value          = value
+    @original_value = value
+    @fuzzable       = false
+    @mutant_index   = 0
+    @type           = :calc
+    @rendered       = ""
+    @fuzz_complete  = true
+  end
+  
+  def mutate
+    false
+  end
+
+  def num_mutations
+    0
+  end
+  
+  def render
+    @rendered = @value.call
+  end
+end
+
+
 class Static < Primitive
   attr_accessor :fuzz_complete, :fuzz_library, :fuzzable, :mutant_index, :original_value, :rendered,
                 :value, :type, :name
@@ -327,6 +356,7 @@ class Str < Primitive
       "%\xfe\xf0%\x01\xff" * 20,
 
       # format strings.
+      "%s%n",
       "%s%n%s%n%s%n",
       "%n"     * 100,
       "%n"     * 500,
@@ -362,9 +392,9 @@ class Str < Primitive
     ]
     
     str_counts = [
-      128, 255, 256, 257, 511, 512, 513, 1023, 1024, 2048, 2049, 4095, 4096, 4097, 5000, 10000, 20000,
-      32762, 32763, 32764, 32765, 32766, 32767, 32768, 32769, 0xFFFF-2, 0xFFFF-1, 0xFFFF, 0xFFFF+1,
-      0xFFFF+2, 99999, 100000, 500000, 1000000
+      16, 32, 64, 128, 255, 256, 257, 511, 512, 513, 1023, 1024, 2048, 2049, 4095, 4096, 4097, 5000, 10000, 20000,
+      32762, 32763, 32764, 32765, 32766, 32767, 32768, 32769, 0xFFFF-2, 0xFFFF-1, 0xFFFF#, 0xFFFF+1,
+      #0xFFFF+2, 99999, 100000, 500000, 1000000
     ]
     
     chars = [

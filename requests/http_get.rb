@@ -56,6 +56,8 @@ request :http_verbs do
     int    1, :format => :ascii
     delim  "."
     int    1, :format => :ascii
+    static "\r\n"
+    static "Host: 172.16.8.101"
     static "\r\n\r\n"
   end
 end
@@ -67,13 +69,15 @@ end
 request :http_method do
   string "FUZZ"
   static " /index.html HTTP/1.1"
+  static "\r\n"
+  static "Host: 172.16.8.101"
   static "\r\n\r\n"
 end
 
 ########################################################################################################################
 # Fuzz this standard multi-header HTTP request
 # GET / HTTP/1.1
-# Host: www.google.com
+# Host: 172.16.8.101
 # Connection: keep-alive
 # User-Agent: Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.1 (KHTML, like Gecko) Chrome/21.0.1180.83 Safari/537.1
 # Accept: text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8
@@ -84,11 +88,11 @@ end
 
 request :http_req do
   static "GET / HTTP/1.1\r\n"
-# Host: www.google.com
+# Host: 172.16.8.101
   static "Host"
   delim  ":"
   delim  " "
-  string "www.google.com"
+  string "172.16.8.101"
   static "\r\n"
 # Connection: keep-alive
   static "Connection"

@@ -35,6 +35,7 @@ class FortigateMonitor < BasicMonitor
     @telnet_prompt  = opts[:telnet_prompt]  || /[a-zA-Z0-9]+ # \z/in
     @telnet_user    = opts[:telnet_user]    || 'admin'
     @telnet_pass    = opts[:telnet_pass]    || ''
+    @extra_cmds     = opts[:extra_cmds]
     
     telnet_login
     telnet_cmd('diag debug crash clear')
@@ -65,8 +66,20 @@ class FortigateMonitor < BasicMonitor
     telnet_cmd('diag debug crash read') do |output|
       if output && output.length > 300
         @crash_synopsis = output
+
+        if @extra_cmds
+          if @extra_cmds.is_a? Array
+            @extra_cmds.each do |cmds|
+              telnet_cmd(@extra_cmds)
+            end
+          else
+            telnet_cmd(@extra_cmds)
+          end
+        end
+
         telnet_cmd('diag debug crash clear')
         return output
+        
       elsif output && output.length > 80
         telnet_cmd('diag debug crash clear')
       end

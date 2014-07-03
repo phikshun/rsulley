@@ -1,7 +1,7 @@
 # -*- coding: binary -*-
 $:.unshift(File.expand_path(File.dirname(__FILE__)))
 
-require 'rbkb'
+require 'rbkb/extends'
 require 'active_support/inflector'
 require 'zlib'
 require 'digest'
@@ -34,7 +34,7 @@ def get(name = nil)
   switch(name)
 end
 
-def request(name, &block)
+def request(name, opts = {}, &block)
   # Initialize a new block request.  All blocks/primitives generated with the block will apply
   # to the object generated.  Note that this behaviour is different than Sulley.  There are very
   # good reasons for that.
@@ -43,7 +43,7 @@ def request(name, &block)
   @sulley_current  ||= nil
   
   raise SyntaxError, "name #{name} already exists" if @sulley_requests[name]
-  @sulley_current = @sulley_requests[name] = Request.new(name, &block)
+  @sulley_current = @sulley_requests[name] = Request.new(name, opts, &block)
 end
 alias_method :response, :request
 

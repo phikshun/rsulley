@@ -3,6 +3,12 @@ require 'requests/http_post'
 require 'requests/http_header'
 
 requests = [
+  :http_verbs,
+  :http_method,
+  :http_req,
+  :http_verbs_post_all,
+  :http_verbs_post,
+  :http_verbs_post_req,
   :http_header_host,
   :http_header_accept,
   :http_header_acceptcharset,
@@ -39,13 +45,7 @@ requests = [
   :http_header_xdonottrack,
   :http_header_xforwardedfor,
   :http_header_xrequestedwith,
-  :http_header_xwapprofile,
-  :http_verbs,
-  :http_method,
-  :http_req,
-  :http_verbs_post_all,
-  :http_verbs_post,
-  :http_verbs_post_req,
+  :http_header_xwapprofile
 ]
 
 session :http, :logfile => 'tmp/http.log', :logfile_level => :error, :session_filename => 'tmp/http.state'
@@ -60,7 +60,7 @@ session :http do
   target(
     :transport => {
         :type         => :tcp,
-        :host         => '10.0.0.2',
+        :host         => '172.16.8.101',
         :port         => 80,
         :reader       => ->(s) { http_reader(s) }
       },

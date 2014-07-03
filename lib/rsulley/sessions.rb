@@ -86,6 +86,7 @@ class Session < RSulley::Graph
     @session_filename   = opts[:session_filename]
     @skip               = opts[:skip]               || 0
     @sleep_time         = opts[:sleep_time]
+    @crash_sleep_time   = opts[:crash_sleep_time]   || 0
     @restart_interval   = opts[:restart_interval]
     @timeout            = opts[:timeout]            || 5.0
     @crash_threshold    = opts[:crash_threshold]    || 3
@@ -128,6 +129,7 @@ class Session < RSulley::Graph
        @logger.add_appenders 'file'
     end
     
+    @last_request        = ''
     @total_num_mutations = 0
     @total_mutant_index  = 0
     @fuzz_node           = nil
@@ -197,6 +199,7 @@ class Session < RSulley::Graph
     data["session_filename"]    = @session_filename
     data["skip"]                = @total_mutant_index
     data["sleep_time"]          = @sleep_time
+    data["crash_sleep_time"]    = @crash_sleep_time
     data["restart_sleep_time"]  = @restart_sleep_time
     data["restart_interval"]    = @restart_interval
     data["timeout"]             = @timeout
@@ -221,6 +224,7 @@ class Session < RSulley::Graph
     @skip                = data["total_mutant_index"]
     @session_filename    = data["session_filename"]
     @sleep_time          = data["sleep_time"]
+    @crash_sleep_time    = data["crash_sleep_time"]
     @restart_sleep_time  = data["restart_sleep_time"]
     @restart_interval    = data["restart_interval"]
     @timeout             = data["timeout"]
@@ -331,12 +335,13 @@ class Session < RSulley::Graph
           end
           
           target.transport.close
-          check target
           
           if @sleep_time
             logger.warn "sleeping for %.02f seconds" % @sleep_time
             sleep @sleep_time
           end
+
+          check target
           
           export_file
         end
@@ -378,7 +383,7 @@ class Session < RSulley::Graph
     target.monitor.finish
     
     if target.monitor.check
-      logger.fatal "monitor detected issue on test case ##{@total_mutant_index}"
+      logger.fatal "monitor detected issue on test case [#{@fuzz_node.id}/#{@total_mutant_index}]"
       
       @crashing_primitives[@fuzz_node.mutant] ||= 0
       @crashing_primitives[@fuzz_node.mutant]  += 1
@@ -389,7 +394,9 @@ class Session < RSulley::Graph
         msg = "primitive has no name, "
       end
       
-      msg += "type: #{@fuzz_node.mutant.type}, default value: #{@fuzz_node.mutant.original_value}"
+      msg += "type: #{@fuzz_node.mutant.type}, default value: #{@fuzz_node.mutant.original_value}\n"
+      msg += "sent #{@last_request.to_s.length} bytes:\n" + 
+             "#{@last_request.to_s.length > 1023 ? @last_request.to_s[0..1023].hexdump + "\n...snip..." : @last_request.to_s.hexdump}"
       logger.fatal msg
       
       @monitor_results[@total_mutant_index] = target.monitor.crash_synopsis
@@ -409,6 +416,8 @@ class Session < RSulley::Graph
         export_file
         exit
       end
+
+      sleep(@crash_sleep_time)
     end
   end
   
@@ -417,7 +426,7 @@ class Session < RSulley::Graph
   
   def pre_send(transport)
   end
-  
+
   def transmit(node, edge, target)
     data = nil
     
@@ -427,8 +436,9 @@ class Session < RSulley::Graph
     
     logger.info "xmitting: [#{node.id}.#{@total_mutant_index}]"
     data = node.render unless data
-    
+
     begin
+      @last_request = data
       target.transport.write(data)
       logger.debug "sent #{data.to_s.length} bytes:\n" + 
         "#{data.to_s.length > 1023 ? data.to_s[0..1023].hexdump + "\n...snip..." : data.to_s.hexdump}"

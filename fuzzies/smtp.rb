@@ -351,26 +351,16 @@ session :smtp do
   connect :ehlo, :auth
   connect :helo, :mail_from
   connect :ehlo, :mail_from
-  connect :helo, :mail_from_with_size
   connect :ehlo, :mail_from_with_size
-  connect :helo, :mail_from_with_cmd1
-  connect :auth, :mail_from
+  connect :ehlo, :mail_from_with_cmd1
   
   connect :mail_from,           :rcpt_to
-  connect :mail_from_with_size, :rcpt_to
-  connect :mail_from_with_cmd1, :rcpt_to
   connect :mail_from,           :rcpt_to_with_cmd1
-  connect :mail_from_with_size, :rcpt_to_with_cmd1
-  connect :mail_from_with_cmd1, :rcpt_to_with_cmd1
   connect :rcpt_to,             :data
   connect :rcpt_to,             :bdat
   connect :rcpt_to,             :burl
-  connect :rcpt_to_with_cmd1,   :data
-  connect :rcpt_to_with_cmd1,   :bdat
-  connect :rcpt_to_with_cmd1,   :burl
   connect :bdat,                :message
   connect :data,                :message
-  connect :burl,                :quit
   connect :message,             :quit
   
   connect :ehlo, :smtp_complete1

@@ -4,6 +4,7 @@
 
 request :http_verbs_post_all do
   static "POST / HTTP/1.1\r\n"
+  static "Host: 172.16.8.101\r\n"
   static "Content-Type: "
   group  :mimetypes, "audio/basic", "audio/x-mpeg", "drawing/x-dwf", "graphics/x-inventor", "image/x-portable-bitmap",
                      "message/external-body","message/http","message/news","message/partial","message/rfc822",
@@ -33,6 +34,7 @@ end
 
 request :http_verbs_post do
   static "POST / HTTP/1.1\r\n"
+  static "Host: 172.16.8.101\r\n"
   static "Content-Type: "
   string "application/x-www-form-urlencoded"
   static "\r\n"
@@ -51,6 +53,7 @@ end
 
 request :http_verbs_post_req do
   static "POST / HTTP/1.1\r\n"
+  static "Host: 172.16.8.101\r\n"
   static "Content-Type: "
   string "application"
   delim  "/"

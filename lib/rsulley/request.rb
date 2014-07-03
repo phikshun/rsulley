@@ -5,9 +5,9 @@ class Request < RSulley::Node
   # This is the top-level container or super-block, instantiated with request or response.
 
   attr_accessor :name, :label, :stack, :block_stack, :closed_blocks, :callbacks,
-                :names, :rendered, :mutant_index, :mutant, :request
+                :names, :rendered, :mutant_index, :mutant, :request, :encoder
 
-  def initialize(name, &blk)
+  def initialize(name, opts = {}, &blk)
     super(nil)
     
     @request        = self
@@ -21,6 +21,7 @@ class Request < RSulley::Node
     @rendered       = ''
     @mutant_index   = 0
     @mutant         = nil
+    @encoder        = opts[:encoder]
 
     # run the provided block in the current instance
     instance_eval &blk
@@ -102,6 +103,11 @@ class Request < RSulley::Node
     end
     
     @rendered = @stack.each.inject('') { |result, item| result += item.rendered; result }
+    if @encoder
+      @rendered = @encoder.call(@rendered)
+    else
+      @rendered
+    end
   end
   
   def reset
@@ -144,7 +150,7 @@ class Request < RSulley::Node
     opts[:endian]    ||= "<"
     
     if @block_stack.map { |item| item.name }.include? block_name
-      raise SytaxError, "cannot add a checksum for a block currently in the stack"
+      raise SyntaxError, "cannot add a checksum for a block currently in the stack"
     end
     
     push RSulley::Checksum.new(block_name, self, opts)
@@ -165,14 +171,14 @@ class Request < RSulley::Node
     opts[:format] ||= :binary
     
     if request.block_stack.map { |item| item.name }.include? block_name
-      raise SytaxError, "cannot add a size for a block currently in the stack"
+      raise SyntaxError, "cannot add a size for a block currently in the stack"
     end
     
     push RSulley::Size.new(block_name, self, opts)
   end
   
   def update(block_name, value)
-    raise SytaxError, "no object with #{block_name} found in current request" unless request.names.has_key? block_name
+    raise SyntaxError, "no object with #{block_name} found in current request" unless request.names.has_key? block_name
     request.names[block_name].value = value
   end
   
@@ -208,6 +214,10 @@ class Request < RSulley::Node
   
   def static(value, opts = {})
     push RSulley::Static.new(value, opts)
+  end
+  
+  def calc(value, opts = {})
+    push RSulley::Calc.new(value, opts)
   end
   
   def string(value, opts = {})

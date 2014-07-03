@@ -1,5 +1,3 @@
-# ftp fuzzer borrowed from http://code.google.com/p/ftpfuzz
-
 request :datauser do
   static "USER anon\r\n"
 end
@@ -362,13 +360,9 @@ session :ftp do
   target(
     :transport => {
         :type         => :tcp,
-        :host         => '10.0.0.2',
+        :host         => '172.16.8.161',
         :port         => 21,
         :read_timeout => 0.1
-      },
-    :monitor => {
-        :type         => :fortigate,
-        :telnet_host  => '172.16.8.101' 
       }
   )
 end

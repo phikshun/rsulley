@@ -88,20 +88,22 @@ class SslTransport < TcpTransport
   end
   
   def open
-    @sock = super
+    super
   
+    return nil unless @sock
+    
     ssl_context = OpenSSL::SSL::SSLContext.new
     ssl_context.ssl_version = @ssl_version
     if @ssl_ca
-      ssl_context.ca_file = @ssl_ca
+      ssl_context.ca_file = 'fuzzies/cert/' + @ssl_ca
       ssl_context.verify_mode = OpenSSL::SSL::VERIFY_PEER|OpenSSL::SSL::VERIFY_FAIL_IF_NO_PEER_CERT
     else
       ssl_context.verify_mode = OpenSSL::SSL::VERIFY_NONE
     end
     
     if @ssl_cert && @ssl_key
-      ssl_context.cert = OpenSSL::X509::Certificate.new(File.open(@ssl_cert))
-      ssl_context.key = OpenSSL::PKey::RSA.new(File.open(@ssl_key))
+      ssl_context.cert = OpenSSL::X509::Certificate.new(File.open('fuzzies/cert/' + @ssl_cert))
+      ssl_context.key = OpenSSL::PKey::RSA.new(File.open('fuzzies/cert/' + @ssl_key))
     end
     
     @sock = OpenSSL::SSL::SSLSocket.new(@sock, ssl_context)
@@ -112,6 +114,7 @@ class SslTransport < TcpTransport
     else
       Timeout.timeout(@connect_timeout) { @sock.connect }
     end
+
     self
   rescue SystemCallError, OpenSSL::SSL::SSLError => e
     logger.error "ssl connect failed - #{e.message}"; nil
@@ -122,17 +125,20 @@ end
 
 class UdpTransport < BasicTransport
   def open
-    # open udp socket
+    @sock = UDPSocket.new
   end
   
   def write(data)
-    # use sendto
+    @sock.send(data, 0, @host, @port)
   end
   
   def read(bytes = 1500)
+    sleep(@read_timeout)
+    ''
   end
   
   def close
+    @sock.close
   end
 end
 
