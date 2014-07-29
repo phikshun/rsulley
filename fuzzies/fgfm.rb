@@ -1,7 +1,5 @@
 request :auth_reply do
-  word 0x36e0, name: 'magic', endian: '<'
-  byte 0x11, name: 'ver'
-  byte 0x00, name: 'type'
+  static "6\xE0\x11\x00"
   size :data, length: 4, signed: false, fuzzable: true, endian: '>', math: ->(x) { x + 8 }
   
   block :data do
@@ -48,7 +46,8 @@ sess_opts = {
   logfile_level:    :error,
   session_filename: 'tmp/fgfm.state',
   crash_sleep_time: 5,
-  sleep_time:       1
+  sleep_time:       0.5,
+  crash_threshold:  50
 }
 
 session :fgfm, sess_opts do
@@ -61,13 +60,13 @@ session :fgfm, sess_opts do
       ssl_cert:         'fmg.cer',
       ssl_key:          'fmg.key',
       ssl_ca:           'fgt.pem',
-      host:             '172.16.8.101',
+      host:             '172.16.8.111',
       port:             541,
       read_timeout:     0.1
     },
     monitor: {
       type:             :fortigate,
-      telnet_host:      '172.16.8.101',
+      telnet_host:      '172.16.8.111',
       extra_cmds:       'sysctl killall fgfm'
     }
   )

@@ -70,11 +70,11 @@ class Delim < Primitive
     @fuzz_library   = []
     @mutant_index   = 0
     
-    [2, 5, 10, 25, 100, 500, 1000].each { |c| @fuzz_library << @value * c } if @value
+    [2, 5, 41, 101, 257, 401, 513, 1025, 4097].each { |c| @fuzz_library << @value * c } if @value
     
     @fuzz_library << ""
     
-    [1, 2, 100].each { |c| @fuzz_library << "\t" * c } if @value == " "
+    [1, 2, 41, 101, 257, 401, 513, 1025, 4097].each { |c| @fuzz_library << "\t" * c } if @value == " "
     
     @fuzz_library << " "
     @fuzz_library << "\t"

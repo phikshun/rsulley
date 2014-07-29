@@ -83,6 +83,7 @@ class Session < RSulley::Graph
   def initialize(opts = {})
     super(nil)
     
+    @server_mode        = opts[:server_mode]        || false
     @session_filename   = opts[:session_filename]
     @skip               = opts[:skip]               || 0
     @sleep_time         = opts[:sleep_time]
@@ -436,14 +437,18 @@ class Session < RSulley::Graph
     
     logger.info "xmitting: [#{node.id}.#{@total_mutant_index}]"
     data = node.render unless data
-
+    
     begin
       @last_request = data
-      target.transport.write(data)
+      if @server_mode
+        @last_recv = target.transport.read
+        target.transport.write(data)
+      else
+        target.transport.write(data)
+        @last_recv = target.transport.read
+      end
       logger.debug "sent #{data.to_s.length} bytes:\n" + 
         "#{data.to_s.length > 1023 ? data.to_s[0..1023].hexdump + "\n...snip..." : data.to_s.hexdump}"
-        
-      @last_recv = target.transport.read
     rescue => e
       logger.error "transport error: #{e.message}"
       logger.debug "backtrace:\n#{e.backtrace}"

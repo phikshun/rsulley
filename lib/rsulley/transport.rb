@@ -75,6 +75,59 @@ class TcpTransport < BasicTransport
   end
 end
 
+class TcpServerTransport < BasicTransport
+  def initialize(opts = {})
+    super
+    @server = TCPServer.new(@port)
+  end
+  
+  def open
+    @sock = @server.accept
+  rescue SystemCallError, Timeout::Error => e
+    logger.error "connect failed - #{e.message}"; nil
+  end
+  
+  def write(data)
+    return nil if @sock.nil? || @sock.closed?
+    Timeout.timeout(@write_timeout) do
+      if @writer
+        @writer.call(@sock)
+      else
+        @sock.write(data)
+      end
+    end
+    self
+  rescue SystemCallError, OpenSSL::SSL::SSLError => e
+    logger.error "write failed - #{e.message}"; nil
+  rescue Timeout::Error
+    logger.warn "write timeout"; nil
+  end
+  
+  def read(bytes = 1)
+    return '' if @sock.nil? || @sock.closed?
+    @buf = ''
+    Timeout.timeout(@read_timeout) do
+      if @reader
+        @buf = @reader.call(@sock)
+      else
+        loop { @buf += @sock.read(bytes).to_s }
+      end
+    end
+    @buf
+  rescue SystemCallError, EOFError => e
+    logger.warn "read failed - #{e.message}"; @buf
+  rescue Timeout::Error
+    logger.debug "read timeout"; @buf 
+  end
+  
+  def close
+    return if @sock.nil? || @sock.closed?
+    @sock.close
+    @sock = nil
+    self
+  end
+end
+
 class SslTransport < TcpTransport
   def initialize(opts = {})
     super
@@ -111,12 +164,13 @@ class SslTransport < TcpTransport
     
     if @ssl_server_mode
       Timeout.timeout(@connect_timeout) { @sock.accept }
+      discard = read # discard client request
     else
       Timeout.timeout(@connect_timeout) { @sock.connect }
     end
 
     self
-  rescue SystemCallError, OpenSSL::SSL::SSLError => e
+  rescue SystemCallError, OpenSSL::SSL::SSLError, TypeError => e
     logger.error "ssl connect failed - #{e.message}"; nil
   rescue Timeout::Error
     logger.error "ssl connect timeout"; nil
