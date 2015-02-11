@@ -1,3 +1,5 @@
+# coding: binary
+
 # rsulley script to test smtp handling
 # needs to be optimized
 

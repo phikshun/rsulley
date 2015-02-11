@@ -1,3 +1,5 @@
+# coding: binary
+
 request :datauser do
   static "USER anon\r\n"
 end

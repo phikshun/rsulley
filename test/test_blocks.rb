@@ -1,4 +1,4 @@
-class TestPrimitives < Test::Unit::TestCase
+class TestPrimitives < Minitest::Test
   include RSulley
   
   def test_groups_and_nums

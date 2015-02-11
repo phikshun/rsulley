@@ -1,3 +1,5 @@
+# coding: binary
+
 module RSulley
 
 class Primitive

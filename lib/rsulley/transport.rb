@@ -1,3 +1,5 @@
+# coding: binary
+
 module RSulley
 
 # TODO: need to add options for max read bytes, or read stop string/regex (for readline like operation)

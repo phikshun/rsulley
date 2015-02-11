@@ -1,4 +1,5 @@
-# -*- coding: binary -*-
+# coding: binary
+
 module RSulley
 
 class Request < RSulley::Node

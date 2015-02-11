@@ -1,3 +1,5 @@
+# coding: binary
+
 # Oracle TNS redirect fuzzer, for firewall handler testing
 
 request :tns_redirect do

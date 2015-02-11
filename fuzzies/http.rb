@@ -1,3 +1,5 @@
+# coding: binary
+
 require 'requests/http_get'
 require 'requests/http_post'
 require 'requests/http_header'

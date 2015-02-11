@@ -1,3 +1,5 @@
+# coding: binary
+
 request :radacct, :encoder => ->(x) { x[4..19] = Digest::MD5.digest(x + "password"); x } do
   static "\x04"
   calc -> { rand(256).chr }

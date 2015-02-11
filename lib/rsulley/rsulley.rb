@@ -1,4 +1,4 @@
-# -*- coding: binary -*-
+# coding: binary
 $:.unshift(File.expand_path(File.dirname(__FILE__)))
 
 require 'rbkb/extends'
@@ -18,13 +18,13 @@ require 'blocks'
 require 'request'
 require 'primitives'
 require 'transport'
-require 'monitor'
+require 'monitors'
 require 'vmcontrol'
 require 'sessions'
 
 module RSulley
-  # This module implements some of the code found in Sulley's main __init__.py.  Block management functions
-  # have been moved to the Request object to support ruby block-based request construction
+  # This module implements some of the code found in Sulley's main __init__.py.  Block management
+  # functions have been moved to the Request object to support ruby block-based request construction
 
 BIG_ENDIAN      = ">"
 LITTLE_ENDIAN   = "<"

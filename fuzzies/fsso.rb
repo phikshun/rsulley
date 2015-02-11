@@ -1,3 +1,5 @@
+# coding: binary
+
 request :tsagent do
   size :main, :length => 2, :signed => true, :fuzzable => true, :endian => '>', :math => ->(x) { x + 2 }
   

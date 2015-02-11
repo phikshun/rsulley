@@ -1,7 +1,6 @@
 #!/usr/bin/env ruby
 
 $:.unshift(File.join File.expand_path(File.dirname(__FILE__)), 'lib', 'rsulley')
-$: << '.'
 
 require 'rsulley'
 include RSulley
@@ -9,4 +8,3 @@ include RSulley
 script = ARGV[0].dup
 script += '.rb' unless script =~ /\.rb$/i
 load script
-

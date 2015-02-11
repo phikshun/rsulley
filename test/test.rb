@@ -1,6 +1,6 @@
 $:.unshift(File.expand_path(File.dirname(__FILE__)))
 require '../lib/rsulley/rsulley'
-require 'test/unit'
+require 'minitest/autorun'
 
 require 'test_primitives'
 require 'test_blocks'

@@ -1,4 +1,4 @@
-RSulley v0.0.1
+RSulley v0.0.2
 ===============
 
 This is a port of Sulley fuzzing framework, with some improvements for embedded devices.
@@ -7,7 +7,7 @@ This is a port of Sulley fuzzing framework, with some improvements for embedded 
 Installation
 ------------
 
-RSulley requires Ruby 1.9 or higher.  After installing the correct Ruby, use "bundle install" from the rsulley root directory.
+RSulley requires Ruby 1.9 or higher (now Ruby 2.1 compatible).  After installing the correct Ruby, use "bundle install" from the rsulley root directory.
 
 
 Usage

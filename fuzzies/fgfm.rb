@@ -1,3 +1,5 @@
+# coding: binary
+
 request :auth_reply do
   static "6\xE0\x11\x00"
   size :data, length: 4, signed: false, fuzzable: true, endian: '>', math: ->(x) { x + 8 }
@@ -60,13 +62,13 @@ session :fgfm, sess_opts do
       ssl_cert:         'fmg.cer',
       ssl_key:          'fmg.key',
       ssl_ca:           'fgt.pem',
-      host:             '172.16.8.111',
+      host:             '172.16.8.101',
       port:             541,
       read_timeout:     0.1
     },
     monitor: {
       type:             :fortigate,
-      telnet_host:      '172.16.8.111',
+      telnet_host:      '172.16.8.101',
       extra_cmds:       'sysctl killall fgfm'
     }
   )

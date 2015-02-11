@@ -1,3 +1,5 @@
+# coding: binary
+
 # Oracle TNS connect fuzzer, for firewall handler testing
 
 request :tns_connect do
